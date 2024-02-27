@@ -36,7 +36,6 @@ Step to follow to run the project:
     ```bash
     npm run dev
     ```
-   
 
 
 note for the frontend guys : Quasar is not installed yet, so I'll let you decide wether to use it or not :)
