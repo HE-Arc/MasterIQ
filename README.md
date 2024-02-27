@@ -3,7 +3,11 @@
 Step to follow to run the project:
 
 1. Clone the repository
-2. Go in the folder api and install the python environment with pipenv, and then run it
+2. Go to the folder api
+    ```bash
+    cd api
+    ```
+3. install the python environment with pipenv, and then run it
     ```bash
     pipenv install
     pipenv shell
@@ -20,7 +24,11 @@ Step to follow to run the project:
     ```bash
     python manage.py runserver
     ```
-6. Go in the folder frontend and install the node environment with npm, and then run it
+6. Go in the folder frontend
+    ```bash
+    cd ../frontend
+    ```
+7. install the node environment with npm, and then run it
     ```bash
     npm install
     ```
