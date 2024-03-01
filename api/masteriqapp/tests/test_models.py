@@ -7,7 +7,6 @@ from masteriqapp.models import Question
 from masteriqapp.models import Option
 
 
-# Create your tests here.
 class ModelTestCases(TestCase):
     def test_recognized_models(self):
         """Check if the models are all recognized"""
