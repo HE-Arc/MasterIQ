@@ -1,4 +1,4 @@
 from .Category import Category
-from .Iq import Iq
+from .IQ import IQ
 from .Question import Question
 from .Option import Option
