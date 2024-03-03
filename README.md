@@ -32,7 +32,7 @@ Step to follow to run the project:
     ```bash
     npm install
     ```
-7. Run the frontend server
+8. Run the frontend server
     ```bash
     npm run dev
     ```
