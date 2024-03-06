@@ -17,10 +17,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: change directory to django backend
+    - name: Change directory to django backend
       run: |
         cd api
-        ls
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -28,6 +27,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        ls
         pip install -r requirements.txt
     - name: Run Tests
       run: |
