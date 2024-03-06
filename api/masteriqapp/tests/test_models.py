@@ -28,11 +28,11 @@ class ModelTestCases(TestCase):
 
         iq_test = IQ.objects.create(user=user_test, category=category_test, iq=100)
 
-        assert len(Category.objects.filter(name="Test")) == 1
-        assert len(Question.objects.filter(text="Yes or No?")) == 1
-        assert len(Option.objects.filter(text="Yes")) == 1
-        assert len(Option.objects.all()) >= 2
-        assert len(User.objects.filter(username="test")) == 1
+        assert Category.objects.get(id=category_test.id).name == category_test.name
+        assert Question.objects.get(id=question_test.id).text == question_test.text
+        assert Option.objects.get(id=option_1.id).text == option_1.text
+        assert len(Option.objects.filter(question=question_test)) == 2
+        assert User.objects.get(id=user_test.id).username == user_test.username
         assert len(IQ.objects.filter(user=user_test, category=category_test)) == 1
 
     def test_use_manager(self):
