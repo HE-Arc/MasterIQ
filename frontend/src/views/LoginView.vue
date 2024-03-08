@@ -19,7 +19,7 @@ const submitForm = () => {
 
 </script>
 <template>
-    <section class="login">
+    <section class="login container">
         <h1>This is login page</h1>
         <form @submit.prevent="submitForm">
             {{ username }} <!-- TODO debug purpose remove this line -->

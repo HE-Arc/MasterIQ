@@ -5,9 +5,8 @@ import { RouterLink } from 'vue-router'
 <template>
   <header>
     <div class="wrapper">
-    <span id="main-title">MasterIQ</span>
+      <RouterLink id="main-title" to="/">MasterIQ</RouterLink>
       <nav>
-        <RouterLink to="/">Categories</RouterLink>
         <RouterLink to="/quiz">Quiz</RouterLink>
         <RouterLink to="/add-question">Add question</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
@@ -16,73 +15,76 @@ import { RouterLink } from 'vue-router'
   </header>
 </template>
 
-<style scoped>
-#main-title
+<style scoped style="scss">
+header {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+  line-height: 1.5;
+}
+
+.wrapper
 {
+  display: flex;
+  flex-direction: column;
+  padding: 1.3rem 0;
+}
+
+#main-title {
   font-family: 'Bevan', cursive;
   font-style: italic;
   color: var(--color-heading);
-  font-size: 2rem;
+  font-size: 2.2rem;
+  text-align: center;
+  margin-bottom: .5rem;
+
+  &:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
 
 nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
-}
 
-nav a.router-link-exact-active {
-  transform: scale(1.1);
-}
+  a {
+    display: inline-block;
+    padding: 1rem;
+    font-size: .75rem;
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+    &.router-link-exact-active {
+      transform: scale(1.1);
+      font-weight: bold;
+    }
+  }
 }
 
 @media (min-width: 1024px) {
+  #main-title
+  {
+    margin-bottom: 0;
+  }
+  .wrapper {
+    flex-direction: row;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
   header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    nav
+    {
+      margin-top: 0;
+      padding: 0;
+      text-align: right;
+      a
+      {
+        font-size: .9rem;
+      }
+    }
   }
 
   .logo {
     margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>
