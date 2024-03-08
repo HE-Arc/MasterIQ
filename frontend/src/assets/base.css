@@ -9,6 +9,7 @@
   --miq-black-mute: #282828;
 
   --miq-aqua: #68DAC1;
+  --miq-yellow-light: #ffc35b;
   --miq-yellow: #FFB32C;
   --miq-green: #3A7D44;
   --miq-red: #D62246;
@@ -31,8 +32,9 @@
   --color-background-soft: var(--miq-white-soft);
   --color-background-mute: var(--miq-white-mute);
   --color-background-btn: var(--miq-yellow);
+  --color-background-btn-hover: var(--miq-yellow-light);
 
-  --color-border: var(--miq-divider-light-2);
+  --color-border: var(--miq-black);
   --color-border-hover: var(--miq-divider-light-1);
 
   --color-heading: var(--miq-aqua);
