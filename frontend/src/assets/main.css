@@ -7,17 +7,25 @@
   font-weight: normal;
 }
 
-a,
-.green {
+a { 
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: var(--miq-blue);
   transition: 0.4s;
   padding: 3px;
 }
 
+a,
+p,
+li,
+input,
+button
+{
+  font-family: 'Montserrat', Inter, sans-serif;
+}
+
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    text-decoration: underline;
   }
 }
 
