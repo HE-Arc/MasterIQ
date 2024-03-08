@@ -18,7 +18,8 @@ a,
 p,
 li,
 input,
-button
+button,
+label
 {
   font-family: 'Montserrat', Inter, sans-serif;
 }

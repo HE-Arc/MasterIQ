@@ -34,7 +34,7 @@
   --color-background-btn: var(--miq-yellow);
   --color-background-btn-hover: var(--miq-yellow-light);
 
-  --color-border: var(--miq-divider-light-2);
+  --color-border: var(--miq-black);
   --color-border-hover: var(--miq-divider-light-1);
 
   --color-heading: var(--miq-aqua);
