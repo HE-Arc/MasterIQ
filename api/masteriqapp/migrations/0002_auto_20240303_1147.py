@@ -19,7 +19,7 @@ def load_initial_data(apps, schema_editor):
         f = os.path.join(directory, filename)
         if os.path.isfile(f) and filename.endswith(".csv"):
             df = pd.read_csv(f)
-            category_name = filename[:-3].replace('-', ' ').title()
+            category_name = filename[:-4].replace('-', ' ').title()
             category = category_model.objects.create(name=category_name)
             for row in df.index:
                 if pd.isnull(df['A'][row]) or pd.isnull(df['B'][row]):
