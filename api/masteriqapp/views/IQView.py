@@ -4,7 +4,6 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from django.apps import apps
-from PIL import Image
 from rest_framework import status
 from rest_framework.response import Response
 

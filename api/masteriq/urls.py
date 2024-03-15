@@ -23,7 +23,8 @@ from masteriqapp import views
 
 router = DefaultRouter()
 
-router.register("category", views.IQView, basename="iq")
+router.register("category", views.IQView, basename="category")
+router.register("question", views.QuestionView, basename="question")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
