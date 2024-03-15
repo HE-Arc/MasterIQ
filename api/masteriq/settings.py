@@ -129,3 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INIT_DATA_FOLDER = os.path.join('data', 'csv')
 IMAGES_FOLDER = os.path.join('data', 'images')
 DEFAULT_IMAGE = "default.jpeg"
+
+
+# end of file
