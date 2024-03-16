@@ -14,7 +14,6 @@ def load_initial_data(apps, schema_editor):
     category_model = apps.get_model('masteriqapp', 'Category')
 
     directory = settings.INIT_DATA_FOLDER
-    print(directory)
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         if os.path.isfile(f) and filename.endswith(".csv"):

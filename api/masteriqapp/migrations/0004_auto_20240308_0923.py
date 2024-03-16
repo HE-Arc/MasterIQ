@@ -12,12 +12,9 @@ def add_category_images(apps, schema_editor):
     for category in category_model.objects.all():
         directory = settings.IMAGES_FOLDER
         img_name = category.name.lower().replace(' ', '_') + ".*"
-        print(img_name)
         f = os.path.join(directory, img_name)
         files = glob.glob(f)
-        print("found: " + str(len(files)))
         if len(files) > 0:
-            print(files[0])
             category.image_path = os.path.join(files[0])
             category.save()
 
