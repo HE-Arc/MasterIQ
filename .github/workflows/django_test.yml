@@ -26,6 +26,10 @@ jobs:
         python -m pip install --upgrade pip
         cd api
         pip install -r requirements.txt
+    - name: Copy .env
+      run: |
+        cd api
+        cp .env.cicd .env
     - name: Run Tests
       run: |
         cd api
