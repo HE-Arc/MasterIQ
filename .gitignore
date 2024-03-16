@@ -1,3 +1,10 @@
 .idea
 db.sqlite3
 __pycache__
+
+# Capistrano
+/config/
+Capfile
+Gemfile
+Gemfile.lock
+capistrano.log

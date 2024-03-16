@@ -12,7 +12,11 @@ p,
 li,
 input,
 button,
-label
+label,
+h1,
+h2,
+h3,
+h4
 {
   font-family: 'Montserrat', Inter, sans-serif;
 }
@@ -32,6 +36,15 @@ label
 .btn:hover
 {
   background-color: var(--color-background-btn-hover);
+}
+
+.title
+{
+  font-family: 'Montserrat', Inter, sans-serif;
+  font-weight: 800;
+  color: black;
+  font-size: 1.75rem;
+  font-style: italic;
 }
 
 .container
