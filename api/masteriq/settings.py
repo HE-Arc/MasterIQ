@@ -135,8 +135,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-INIT_DATA_FOLDER = os.path.join('data', 'csv')
-IMAGES_FOLDER = os.path.join('data', 'images')
+INIT_DATA_FOLDER = os.getenv("INIT_DATA_FOLDER") #os.path.join('data', 'csv')
+IMAGES_FOLDER = os.getenv("IMAGES_FOLDER") #os.path.join('data', 'images')
 DEFAULT_IMAGE = "default.jpeg"
 
 
