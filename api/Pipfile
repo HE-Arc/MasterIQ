@@ -8,6 +8,7 @@ django = "==5.0.2"
 djangorestframework = "==3.14.0"
 pandas = "*"
 django-cors-headers = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
