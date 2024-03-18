@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('masteriqapp', '0002_auto_20240303_1147'),
+        ('masteriqapp', '0006_alter_option_question_alter_option_text_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
