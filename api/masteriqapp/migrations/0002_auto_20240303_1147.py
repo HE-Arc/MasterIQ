@@ -36,7 +36,7 @@ def load_initial_data(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('masteriqapp', '0001_initial'),
+        ('masteriqapp', '0003_alter_category_users'),
     ]
 
     operations = [

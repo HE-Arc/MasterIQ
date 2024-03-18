@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('masteriqapp', '0003_alter_category_users'),
+        ('masteriqapp', '0002_auto_20240303_1147'),
     ]
 
     operations = [
