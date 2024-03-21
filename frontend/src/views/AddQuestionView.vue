@@ -38,11 +38,11 @@ const submitForm = () => {
     })
     .then(response => {
         console.log('Question saved successfully:', response.data);
-        // Vous pouvez ajouter une logique ici pour rediriger l'utilisateur vers une autre page ou afficher un message de succès
+        // TODO redirect user or show success message
     })
     .catch(error => {
         console.error('Error saving question:', error);
-        // Vous pouvez gérer les erreurs ici, par exemple afficher un message d'erreur à l'utilisateur
+        // TODO handle error
     });
 };
 </script>
