@@ -8,3 +8,6 @@ Capfile
 Gemfile
 Gemfile.lock
 capistrano.log
+
+# api
+/api/.env
