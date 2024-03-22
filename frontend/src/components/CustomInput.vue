@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, defineProps, defineEmits } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
     label: {
@@ -11,7 +11,7 @@ const props = defineProps({
         default: true,
         required: false,
     },
-    value: {
+    modelValue: {
         type: String,
         required: true,
     },
@@ -29,10 +29,11 @@ const props = defineProps({
 
 const name = computed(() => props.label.toLowerCase());
 
-const emit = defineEmits(['input', 'change']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // Peut ajouter la validation ici
 const onInput = (event) => {
+    emit('update:modelValue', event.target.value);
     emit('input', event.target.value);
 };
 
@@ -44,7 +45,7 @@ const onChange = (event) => {
 <template>
     <div class="input-container">
         <label v-if="hasLabel" :for="name">{{ label }}<span v-if="props.required">*</span></label>
-        <input :type="type" :id="name" :name="name" :value="value" @input="onInput" @change="onChange" maxlength="250" :required="required"/>
+        <input :type="type" :id="name" :name="name" :value="modelValue" @input="onInput" @change="onChange" maxlength="25" :required="required"/>
     </div>
 </template>
 
