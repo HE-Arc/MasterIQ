@@ -1,13 +1,12 @@
 .idea
 db.sqlite3
 __pycache__
-
+*.env
 # Capistrano
 /config/
 Capfile
 Gemfile
 Gemfile.lock
 capistrano.log
+<<<<<<< HEAD
 
-# api
-/api/.env
