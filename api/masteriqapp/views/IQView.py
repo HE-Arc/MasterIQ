@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponse
 from django.http import JsonResponse
 from rest_framework import viewsets
@@ -33,5 +35,8 @@ class IQView(viewsets.ViewSet):
                 "user_iq": 100 #TODO: REPLACE WITH USER IQ
             }
             answer_dict[category.id] = cat_dict
-        return JsonResponse(answer_dict)
+        return Response(status=status.HTTP_200_OK, data=answer_dict)
 
+    @action(detail=True, methods=["GET"])
+    def user_iq(self, request, pk):
+        return Response(status=status.HTTP_200_OK, data={"user_iq":random.randint(1,200)})

@@ -54,6 +54,6 @@ class RouteTestCases(TestCase):
         assert response.json()['user_rank'] is not None
         assert response.json()['user_iq'] is not None
 
-
-
-
+        response = c.get("/api/category/2/user_iq/")
+        assert response.status_code == 200
+        assert response.json()['user_iq'] is not None
