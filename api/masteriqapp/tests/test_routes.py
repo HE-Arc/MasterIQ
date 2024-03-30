@@ -30,3 +30,30 @@ class RouteTestCases(TestCase):
         assert response.json()['options'] is not None
         assert len(response.json()['options']) >= 2
 
+        response = c.get("/api/rank/1/leaderboard/")
+        assert response.status_code == 200
+        assert len(response.json()) > 0
+        assert response.json()[0]['user_id'] is not None
+        assert response.json()[0]['user_name'] is not None
+        assert response.json()[0]['user_iq'] is not None
+
+        response = c.get("/api/rank/global_leaderboard/")
+        assert response.status_code == 200
+        assert len(response.json()) > 0
+        assert response.json()[0]['user_id'] is not None
+        assert response.json()[0]['user_name'] is not None
+        assert response.json()[0]['user_iq'] is not None
+
+        response = c.get("/api/rank/1/user/")
+        assert response.status_code == 200
+        assert response.json()['user_rank'] is not None
+        assert response.json()['user_iq'] is not None
+
+        response = c.get("/api/rank/global_user/")
+        assert response.status_code == 200
+        assert response.json()['user_rank'] is not None
+        assert response.json()['user_iq'] is not None
+
+
+
+
