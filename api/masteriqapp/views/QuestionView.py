@@ -32,6 +32,7 @@ class QuestionView(viewsets.ViewSet):
         questions = self.question_model.objects.filter(category=category)
         new_question = random.choice(questions)
         request.session['question'] = new_question.id
+        request.session['options_asked'] = False
         print(request.session['question'])
         serializer = QuestionSerializer(new_question)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -78,9 +79,55 @@ class QuestionView(viewsets.ViewSet):
         if not 'question' in request.session:
             return Response(status=449, data={"error": "No question being answered at the moment"})
         question_id = request.session['question']
+        request.session['options_asked'] = True
         question = self.question_model.objects.get(pk=question_id)
         print(question.options.all())
         data_to_send = {'question_id': question.id, 'number_of_question': len(question.options.all()), 'options': {}}
         for option in question.options.all():
             data_to_send['options'][option.id] = option.text
+        return Response(status=status.HTTP_200_OK, data=data_to_send)
+
+    @action(detail=False, methods=["POST"], url_path="answer_text")
+    def answer_text(self, request):
+        print(request.session['options_asked'])
+        if not 'answer' in request.data:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
+        if not 'question' in request.session or not 'options_asked' in request.session:
+            return Response(status=449, data={"error": "No question being answered at the moment"})
+        if request.session['options_asked']:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Options already asked, you can only "
+                                                                               "answer with options"})
+        question = self.question_model.objects.get(pk=request.session['question'])
+        right_answer = question.options.get(is_correct=True)
+        user_is_correct = False
+        if request.data['answer'].lower() == right_answer.text.lower():
+            user_is_correct = True
+        data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
+                        "answer_sent": request.data['answer']}
+        del request.session['question']
+        del request.session['options_asked']
+        #TODO: add points to user when connexion is implemented
+        return Response(status=status.HTTP_200_OK, data=data_to_send)
+
+    @action(detail=False, methods=["POST"], url_path="answer_option")
+    def answer_options(self, request):
+        if not 'answer' in request.data:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
+        if not 'question' in request.session or not 'options_asked' in request.session:
+            return Response(status=449, data={"error": "No question being answered at the moment"})
+        if not request.session['options_asked']:
+            return Response(status=status.HTTP_400_BAD_REQUEST,
+                            data={"error": "Options already asked, you can only "
+                                           "answer with options"})
+        question = self.question_model.objects.get(pk=request.session['question'])
+        right_answer = question.options.get(is_correct=True)
+        answer_sent = self.question_model.objects.get(pk=request.data['answer'])
+        user_is_correct = False
+        if answer_sent.id == right_answer.id:
+            user_is_correct = True
+        data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
+                        "answer_sent": answer_sent.text}
+        del request.session['question']
+        del request.session['options_asked']
+        #TODO: add points to user when connexion is implemented
         return Response(status=status.HTTP_200_OK, data=data_to_send)
