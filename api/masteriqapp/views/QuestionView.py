@@ -50,7 +50,8 @@ class QuestionView(viewsets.ViewSet):
         if question_serializer.is_valid():
             question = question_serializer.save()
         else:
-            return Response(data={"field": "Question", "errors": question_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"field": "Question", "errors": question_serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         for option in datas['options']:
             option_serializer = OptionSerializer(data={"text": option, "is_correct": False, "question": 3})
@@ -59,12 +60,27 @@ class QuestionView(viewsets.ViewSet):
                 option_serializer.save()
             else:
                 print(option_serializer.data)
-                return Response(data={"field": "Option", "error": option_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data={"field": "Option", "error": option_serializer.errors},
+                                status=status.HTTP_400_BAD_REQUEST)
 
-        option_serializer = OptionSerializer(data={"text": datas['answer'], "is_correct": True, "question": question.id})
+        option_serializer = OptionSerializer(
+            data={"text": datas['answer'], "is_correct": True, "question": question.id})
         if option_serializer.is_valid():
             question = option_serializer.save()
         else:
-            return Response(data={"field": "Answer", "error": option_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"field": "Answer", "error": option_serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(question_serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=["GET"])
+    def options(self, request):
+        if not 'question' in request.session:
+            return Response(status=449, data={"error": "No question being answered at the moment"})
+        question_id = request.session['question']
+        question = self.question_model.objects.get(pk=question_id)
+        print(question.options.all())
+        data_to_send = {'question_id': question.id, 'number_of_question': len(question.options.all()), 'options': {}}
+        for option in question.options.all():
+            data_to_send['options'][option.id] = option.text
+        return Response(status=status.HTTP_200_OK, data=data_to_send)
