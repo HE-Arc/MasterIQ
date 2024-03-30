@@ -33,7 +33,6 @@ class QuestionView(viewsets.ViewSet):
         new_question = random.choice(questions)
         request.session['question'] = new_question.id
         request.session['options_asked'] = False
-        print(request.session['question'])
         serializer = QuestionSerializer(new_question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -60,7 +59,6 @@ class QuestionView(viewsets.ViewSet):
             if option_serializer.is_valid():
                 option_serializer.save()
             else:
-                print(option_serializer.data)
                 return Response(data={"field": "Option", "error": option_serializer.errors},
                                 status=status.HTTP_400_BAD_REQUEST)
 
@@ -81,7 +79,6 @@ class QuestionView(viewsets.ViewSet):
         question_id = request.session['question']
         request.session['options_asked'] = True
         question = self.question_model.objects.get(pk=question_id)
-        print(question.options.all())
         data_to_send = {'question_id': question.id, 'number_of_question': len(question.options.all()), 'options': {}}
         for option in question.options.all():
             data_to_send['options'][option.id] = option.text
@@ -89,7 +86,6 @@ class QuestionView(viewsets.ViewSet):
 
     @action(detail=False, methods=["POST"], url_path="answer_text")
     def answer_text(self, request):
-        print(request.session['options_asked'])
         if not 'answer' in request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
         if not 'question' in request.session or not 'options_asked' in request.session:
