@@ -25,6 +25,7 @@ router = DefaultRouter()
 
 router.register("category", views.IQView, basename="category")
 router.register("question", views.QuestionView, basename="question")
+router.register("rank", views.RankView, basename="rank")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
