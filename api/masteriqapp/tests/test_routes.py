@@ -15,7 +15,6 @@ class RouteTestCases(TestCase):
 
         response = c.get("/api/question/1/new/")
         assert response.status_code == 200
-        #assert response.json()['id'] is not None
         assert response.json()['text'] is not None
         assert response.json()['category'] is not None
 
@@ -24,12 +23,10 @@ class RouteTestCases(TestCase):
             "options": ["11", "15", "He wasnt born"],
             "answer": "1"})
 
-        print(response.status_code)
-        print(response.json())
-        #TODO: understand why it works in manual test, but not in this test
-        #assert response.status_code == 201
-        #assert response.json()['id'] is not None
-        #assert response.json()['text'] is not None
-        #assert response.json()['category'] is not None
-        #assert response.json()['options'] is not None
-        #assert len(response.json()['options']) >= 2
+        response = c.get("/api/question/options/")
+        assert response.status_code == 200
+        assert response.json()['question_id'] is not None
+        assert response.json()['number_of_question'] is not None
+        assert response.json()['options'] is not None
+        assert len(response.json()['options']) >= 2
+
