@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
     <div class="wrapper">
       <RouterLink id="main-title" to="/">MasterIQ</RouterLink>
       <nav>
-        <RouterLink to="/quiz">Quiz</RouterLink>
+        <RouterLink to="/">Categories</RouterLink>
         <RouterLink to="/add-question">Add question</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
       </nav>
