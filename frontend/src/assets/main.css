@@ -13,6 +13,7 @@ li,
 input,
 button,
 label,
+span,
 h1,
 h2,
 h3,
@@ -36,6 +37,18 @@ h4
 .btn:hover
 {
   background-color: var(--color-background-btn-hover);
+}
+
+
+.info {
+  margin: 1.5rem 0 1rem 0;
+}
+
+.box
+{
+  padding: 2rem;
+  background-color: var(--color-background-soft);
+  border-radius: 27px;
 }
 
 .title
