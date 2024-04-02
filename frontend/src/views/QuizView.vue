@@ -27,7 +27,7 @@ onMounted(() => {
         <p class="info">Answer correctly to the question and earn as many IQs as possible!</p>
         <h1 class="title">Question</h1>
         <p class="question box">{{ question }}</p>
-        <AnswerForm />
+        <AnswerForm @new-question="fetchNewQuestion" />
     </section>
 </template>
 

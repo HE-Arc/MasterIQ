@@ -1,14 +1,16 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { defineEmits, onMounted, ref } from 'vue';
+
 // default variables
 const route = useRoute();
 const id_category = route.params.id_category;
 
 // variables specific to this component
+const emit = defineEmits(['newQuestion'])
 const answer_sent = ref(false);
-const show_text = ref(true);
+const show_text_form = ref(true);
 const answer_text = ref("");
 
 const options = ref([]);
@@ -32,16 +34,38 @@ const submitAnswerOption = async (key) => {
 }
 
 const fetchOptions = async () => {
-    show_text.value = false;
+    show_text_form.value = false;
     const response = await axios.get(`/api/question/options/`, {
     });
     options.value = response.data.options;
 }
 
+const hasAskedOptions = async () => {
+    const response = await axios.get(`/api/question/has_asked_options/`); // TODO
+    return !!response.data.has_asked_options; // TODO
+}
+
+const newQuestion = () => {
+    answer_sent.value = false;
+    setShowTextForm(true);
+    emit('newQuestion');
+}
+
+onMounted(() => {
+    // ask backend if the user has already ask options in this category
+    // if so, show the options form
+    /*
+    if (hasAskedOptions()) {
+        fetchOptions();
+        show_text_form.value = false;
+    }*/
+    // if not, show the text form (default value is true)
+
+});
 </script>
 
 <template>
-    <div v-if="show_text">
+    <div v-if="show_text_form">
         <div v-if="!answer_sent" class="answer-text box">
             <span>Answer directly</span>
             <input type="text" v-model="answer_text" />
