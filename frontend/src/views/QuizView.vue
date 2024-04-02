@@ -9,11 +9,13 @@ const route = useRoute();
 const id_category = route.params.id_category;
 
 // variables specific to this component
-const question = ref("");
+const question = ref(null);
 
 const fetchNewQuestion = async () => {
+    console.log("fetch new question");
     const response = await axios.get(`/api/question/${id_category}/new`, {
     });
+    console.log("response to new question");
     question.value = response.data.text;
 }
 
@@ -29,7 +31,7 @@ onMounted(() => {
         <h1 class="title">Question</h1>
         <p class="question box">{{ question }}</p>
         <AnswerForm @new-question="fetchNewQuestion" />
-        <LeaderBoard :id_category="Number(id_category)" />
+        <LeaderBoard :id_category="Number(id_category)"/>
     </section>
 </template>
 

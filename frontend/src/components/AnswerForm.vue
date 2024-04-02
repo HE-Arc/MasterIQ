@@ -41,8 +41,8 @@ const fetchOptions = async () => {
 }
 
 const hasAskedOptions = async () => {
-    const response = await axios.get(`/api/question/has_asked_options/`); // TODO
-    return !!response.data.has_asked_options; // TODO
+    const response = await axios.get(`/api/question/options_asked`);
+    return !!response.data.options_asked;
 }
 
 const newQuestion = () => {
@@ -52,16 +52,23 @@ const newQuestion = () => {
     emit('newQuestion');
 }
 
-onMounted(() => {
+const init = async () => {
     // ask backend if the user has already ask options in this category
     // if so, show the options form
-    /*
-    if (hasAskedOptions()) {
+
+    console.log("request Has asked options")
+    const response = await hasAskedOptions();
+    console.log("response Has asked options")
+    console.log(response);
+    if (response) {
         fetchOptions();
         show_text_form.value = false;
-    }*/
+    }
     // if not, show the text form (default value is true)
+}
 
+onMounted(() => {
+    init();
 });
 </script>
 
@@ -77,7 +84,7 @@ onMounted(() => {
         </div>
         <div v-else>
             <p v-if="response_to_answer.user_is_correct" class="right-answer info-answer box">
-                Good job! {{ response_to_answer.right_answer }} was the right answer!
+                Good job! "{{ response_to_answer.right_answer }}" was the right answer!
             </p>
             <p v-else class="wrong-answer info-answer box">
                 Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
@@ -94,7 +101,7 @@ onMounted(() => {
             <p v-else class="wrong-answer info-answer box">
                 Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
         response_to_answer.right_answer }}"</p>
-        
+
             <button class="btn" @click="newQuestion">Next question</button>
         </div>
         <div v-else class="box">
