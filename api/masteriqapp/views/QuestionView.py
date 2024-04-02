@@ -128,3 +128,10 @@ class QuestionView(viewsets.ViewSet):
         del request.session['options_asked']
         #TODO: add points to user when connexion is implemented
         return Response(status=status.HTTP_200_OK, data=data_to_send)
+
+    @action(detail=False, methods=["GET"])
+    def options_asked(self, request):
+        if not 'question' in request.session or not 'options_asked' in request.session:
+            return Response(status=449, data={"error": "No question being answered at the moment"})
+        data_to_send = {"options_asked": request.session['options_asked']}
+        return Response(status=status.HTTP_200_OK, data=data_to_send)
