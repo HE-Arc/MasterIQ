@@ -39,5 +39,6 @@ onMounted(() => {
 
 .question {
     text-align: center;
+    margin-bottom: 1.3rem;
 }
 </style>

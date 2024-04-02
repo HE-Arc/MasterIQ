@@ -12,7 +12,9 @@
   --miq-yellow-light: #ffc35b;
   --miq-yellow: #FFB32C;
   --miq-green: #3A7D44;
-  --miq-red: #D62246;
+  --miq-light-green: #95DB9F;
+  --miq-red: #A31430;
+  --miq-light-red: #FBC1CD;
   --miq-blue: #00AAF8;
 
   --miq-divider-light-1: rgba(60, 60, 60, 0.29);
@@ -36,6 +38,11 @@
 
   --color-border: var(--miq-black);
   --color-border-hover: var(--miq-divider-light-1);
+
+  --color-right: var(--miq-green);
+  --color-background-right: var(--miq-light-green);
+  --color-wrong: var(--miq-red);
+  --color-background-wrong: var(--miq-light-red);
 
   --color-heading: var(--miq-aqua);
   --color-text: var(--miq-text-dark-1);
