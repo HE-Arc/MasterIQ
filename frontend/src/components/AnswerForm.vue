@@ -82,7 +82,7 @@ onMounted(() => {
                 Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
         response_to_answer.right_answer }}".
             </p>
-            <button class="btn" @click="newQuestion">Next question TODO</button>
+            <button class="btn" @click="newQuestion">Next question</button>
         </div>
     </div>
     <div v-else class="answer-options">
@@ -94,7 +94,7 @@ onMounted(() => {
                 Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
         response_to_answer.right_answer }}"</p>
         
-            <button class="btn" @click="newQuestion">Next question TODO</button>
+            <button class="btn" @click="newQuestion">Next question</button>
         </div>
         <div v-else class="box">
             <button v-for="(option, key, index) in options" :key="key" class="btn option"
