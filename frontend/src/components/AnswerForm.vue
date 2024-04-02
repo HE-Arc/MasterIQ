@@ -47,7 +47,8 @@ const hasAskedOptions = async () => {
 
 const newQuestion = () => {
     answer_sent.value = false;
-    setShowTextForm(true);
+    show_text_form.value = true;
+    answer_text.value = "";
     emit('newQuestion');
 }
 
