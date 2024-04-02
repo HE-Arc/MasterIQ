@@ -38,6 +38,8 @@ CORS_ALLOWED_ORIGINS = [
     os.getenv('BACKEND_URL'),
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 # Application definition
 
 INSTALLED_APPS = [

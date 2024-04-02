@@ -40,10 +40,6 @@ onMounted(() => {
     column-gap: 1.5rem;
 }
 
-.info {
-    margin: 1.5rem 0 1rem 0;
-}
-
 .btn-container {
     display: flex;
     justify-content: center;
