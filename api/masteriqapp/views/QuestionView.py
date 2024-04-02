@@ -18,6 +18,7 @@ masteriq = apps.get_app_config("masteriqapp")
 class QuestionView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
     question_model = masteriq.get_model("Question")
+    option_model = masteriq.get_model("Option")
     queryset = category_model.objects.all()
 
     @action(detail=True, methods=["GET"])
@@ -117,7 +118,7 @@ class QuestionView(viewsets.ViewSet):
                                            "answer with options"})
         question = self.question_model.objects.get(pk=request.session['question'])
         right_answer = question.options.get(is_correct=True)
-        answer_sent = self.question_model.objects.get(pk=request.data['answer'])
+        answer_sent = self.option_model.objects.get(pk=request.data['answer'])
         user_is_correct = False
         if answer_sent.id == right_answer.id:
             user_is_correct = True
