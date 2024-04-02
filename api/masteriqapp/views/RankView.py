@@ -35,7 +35,7 @@ class RankView(viewsets.ViewSet):
             data_to_send.append({
                 "user_id": random.randint(1, 1000),
                 "user_name": f"player_number_{i}",
-                "user_iq": 50 + (i * 10)
+                "user_iq": 150 - (i * 10)
             })
 
         return Response(data=data_to_send, status=status.HTTP_200_OK)
