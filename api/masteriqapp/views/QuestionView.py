@@ -80,7 +80,7 @@ class QuestionView(viewsets.ViewSet):
         question_id = request.session['question']
         request.session['options_asked'] = True
         question = self.question_model.objects.get(pk=question_id)
-        data_to_send = {'question_id': question.id, 'number_of_question': len(question.options.all()), 'options': {}}
+        data_to_send = {'question_id': question.id, 'number_of_options': len(question.options.all()), 'options': {}}
         for option in question.options.all():
             data_to_send['options'][option.id] = option.text
         return Response(status=status.HTTP_200_OK, data=data_to_send)
