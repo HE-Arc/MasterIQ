@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import CategoryItem from '@/components/CategoryItem.vue';
+import LeaderBoard from '@/components/LeaderBoard.vue';
 const API_SERVER = import.meta.env.VITE_API_SERVER;
 
 const categories = ref([]);
@@ -27,8 +28,8 @@ onMounted(() => {
         </div>
         <div class="btn-container">
             <button class="btn">Random question</button>
-
         </div>
+        <LeaderBoard />
     </main>
 </template>
 

@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import AnswerForm from '@/components/AnswerForm.vue';
+import LeaderBoard from '@/components/LeaderBoard.vue';
 // default variables
 const route = useRoute();
 const id_category = route.params.id_category;
@@ -28,6 +29,7 @@ onMounted(() => {
         <h1 class="title">Question</h1>
         <p class="question box">{{ question }}</p>
         <AnswerForm @new-question="fetchNewQuestion" />
+        <LeaderBoard :id_category="Number(id_category)" />
     </section>
 </template>
 
