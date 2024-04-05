@@ -20,14 +20,19 @@ const router = createRouter({
       component: () => import('../views/AddQuestionView.vue')
     },
     {
-      path: '/login',
+      path: 'Authentication/login',
       name: 'Login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/Authentication/LoginView.vue')
     },
     {
-      path: '/register',
-      name: 'Register',
-      component: () => import('../views/RegisterView.vue')
+      path: 'Authentication/logout',
+      name: 'Logout',
+      component: () => import('../views/Authentication/LogoutView.vue')
+    },
+    {
+      path: 'Authentication/Signup',
+      name: 'Signup',
+      component: () => import('../views/Authentication/SignUpView.vue')
     }
   ]
 })
