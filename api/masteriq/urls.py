@@ -26,8 +26,10 @@ router = DefaultRouter()
 router.register("category", views.IQView, basename="category")
 router.register("question", views.QuestionView, basename="question")
 router.register("rank", views.RankView, basename="rank")
+router.register("user", views.AuthenticationView, basename="user")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", include(router.urls))
+    path("api/", include(router.urls)),
 ]
