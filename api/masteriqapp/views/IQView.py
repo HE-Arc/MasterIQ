@@ -42,7 +42,9 @@ class IQView(viewsets.ViewSet):
 
     @action(detail=True, methods=["GET"])
     def user_iq(self, request, pk):
-        return Response(status=status.HTTP_200_OK, data={"user_iq": random.randint(1, 200)})
+        category = self.category_model.objects.get(pk=pk)
+        iq = self.iq_model.objects.get_iq_of_user_in_category(user=request.user, category=category)
+        return Response(status=status.HTTP_200_OK, data={"user_iq": iq})
 
     @action(detail=True, methods=["GET"], url_path="name")
     def category_name(self, request, pk):
