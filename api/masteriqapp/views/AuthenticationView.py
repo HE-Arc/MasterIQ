@@ -1,8 +1,7 @@
 from django.apps import apps
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
@@ -33,8 +32,8 @@ class AuthenticationView(viewsets.ViewSet):
     def register(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        if not User.objects.filter(username=username).exists():
-            user = User.objects.create_user(username=username, password=password)
+        if not get_user_model().objects.filter(username=username).exists():
+            user = get_user_model().objects.create_user(username=username, password=password)
             self.create_iq_objects_for_new_user(user)
             login(request, user)
             return Response({'message': 'Register successful'}, status=status.HTTP_201_CREATED)
