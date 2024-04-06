@@ -25,12 +25,14 @@ def load_initial_data(apps, schema_editor):
                     continue
                 question = question_model.objects.create(text=df['Questions'][row], category=category)
                 right_option_text = df['Correct'][row]
-                option_model.objects.create(text=right_option_text, is_correct=True, question=question)
 
                 for letter in ['A', 'B', 'C', 'D']:
-                    if pd.isnull(df[letter][row]) or df[letter][row] == right_option_text:
+                    if pd.isnull(df[letter][row]):
                         continue
-                    option_model.objects.create(text=df[letter][row], is_correct=False, question=question)
+                    if df[letter][row] == right_option_text:
+                        option_model.objects.create(text=right_option_text, is_correct=True, question=question)
+                    else:
+                        option_model.objects.create(text=df[letter][row], is_correct=False, question=question)
     print("Initial data loaded!")
 
 
