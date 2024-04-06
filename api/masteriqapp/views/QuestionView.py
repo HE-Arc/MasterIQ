@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from django.apps import apps
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from masteriqapp.serializers.OptionSerializer import OptionSerializer
@@ -43,7 +44,7 @@ class QuestionView(viewsets.ViewSet):
     question_model = masteriq.get_model("Question")
     option_model = masteriq.get_model("Option")
     queryset = category_model.objects.all()
-
+    permission_classes = (IsAuthenticated,)
     @action(detail=True, methods=["GET"])
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)

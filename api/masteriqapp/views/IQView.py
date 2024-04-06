@@ -2,13 +2,14 @@ import random
 
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from django.apps import apps
 from rest_framework import status
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
+from rest_framework.permissions import IsAuthenticated
 
 masteriq = apps.get_app_config("masteriqapp")
 
@@ -16,7 +17,7 @@ masteriq = apps.get_app_config("masteriqapp")
 class IQView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
     queryset = category_model.objects.all()
-
+    permission_classes = (IsAuthenticated,)
     @action(detail=True, methods=["GET"], url_path="image")
     def category_image(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
@@ -28,7 +29,6 @@ class IQView(viewsets.ViewSet):
 
     @action(detail=False, methods=["GET"], url_path="iq")
     def category_with_iq(self, request):
-        # TODO: RESTRICT TO CONNECTED USER
         answer_dict = {}
         for category in self.queryset:
             cat_dict = {

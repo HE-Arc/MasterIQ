@@ -155,5 +155,10 @@ INIT_DATA_FOLDER = os.path.join('data', 'csv')
 IMAGES_FOLDER = os.path.join('data', 'images')
 DEFAULT_IMAGE = "default.jpeg"
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 
 # end of file

@@ -3,6 +3,7 @@ import random
 from django.apps import apps
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -13,7 +14,7 @@ class RankView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
     question_model = masteriq.get_model("Question")
     queryset = category_model.objects.all()
-
+    permission_classes = (IsAuthenticated,)
     @action(detail=True, methods=["GET"])
     def leaderboard(self, request, pk):
         # TODO: get data from database when users are implemented
