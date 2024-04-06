@@ -16,6 +16,7 @@ masteriq = apps.get_app_config("masteriqapp")
 
 class IQView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
+    iq_model = masteriq.get_model("IQ")
     queryset = category_model.objects.all()
     permission_classes = (IsAuthenticated,)
     @action(detail=True, methods=["GET"], url_path="image")
@@ -31,9 +32,10 @@ class IQView(viewsets.ViewSet):
     def category_with_iq(self, request):
         answer_dict = {}
         for category in self.queryset:
+            iq = self.iq_model.objects.get_iq_of_user_in_category(user=request.user, category=category)
             cat_dict = {
                 "category_name": category.name,
-                "user_iq": 100  # TODO: REPLACE WITH USER IQ
+                "user_iq": iq
             }
             answer_dict[category.id] = cat_dict
         return Response(status=status.HTTP_200_OK, data=answer_dict)
