@@ -60,13 +60,8 @@ class RankView(viewsets.ViewSet):
 
     @action(detail=False, methods=["GET"])
     def global_user(self, request):
+        # TODO: ask how to do better?? filter won't be efficient if more element
         data_with_score = get_user_model().objects.annotate(global_score=Avg('iq__iq'), row_number=Window(expression=RowNumber())).order_by('-global_score')
         user_ranking = list(filter(lambda r: r.id == request.user.id, data_with_score))
         data_to_send = {"user_rank": user_ranking[0].row_number, "user_iq": user_ranking[0].global_score}
         return Response(data=data_to_send, status=status.HTTP_200_OK)
-
-
-    def get_leaderboard_abomination(self):
-        users = self.user_model.objects.all()
-        for user in users:
-            user_iqs = self.iq_model.objects.get_all_iq_of_user(user)
