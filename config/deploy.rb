@@ -60,6 +60,19 @@ namespace :pip do
   end
 end
 
+after 'deploy:updating', 'django:collectstatic'
+
+namespace :django do
+  desc 'Install static files'
+  task :collectstatic do
+    on roles([:app, :web]) do |h|
+     within "#{release_path}/api" do
+        execute :python3, 'manage.py', 'collectstatic'
+      end 
+    end
+  end
+end
+
 after 'deploy:updating', 'npm:install'
 namespace :npm do
   desc 'NPM install'
