@@ -9,12 +9,17 @@ const route = useRoute();
 const id_category = route.params.id_category;
 
 // variables specific to this component
-const question = ref("");
+const question = ref(null);
+const hasAskedOptions = ref(false);
 
 const fetchNewQuestion = async () => {
-    const response = await axios.get(`/api/question/${id_category}/new`, {
+    const responseQuestion = await axios.get(`/api/question/${id_category}/new`, {
     });
-    question.value = response.data.text;
+    question.value = responseQuestion.data.text;
+
+    // wait for the question before checking if the user has asked for options
+    const responseOptionAsked = await axios.get(`/api/question/options_asked`);
+    hasAskedOptions.value = !!responseOptionAsked.data.options_asked;
 }
 
 onMounted(() => {
@@ -28,8 +33,8 @@ onMounted(() => {
         <p class="info">Answer correctly to the question and earn as many IQs as possible!</p>
         <h1 class="title">Question</h1>
         <p class="question box">{{ question }}</p>
-        <AnswerForm @new-question="fetchNewQuestion" />
-        <LeaderBoard :id_category="Number(id_category)" />
+        <AnswerForm @new-question="fetchNewQuestion" :hasAskedOptions="hasAskedOptions"/>
+        <LeaderBoard :id_category="Number(id_category)"/>
     </section>
 </template>
 
