@@ -1,21 +1,13 @@
 <script setup>
-import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import CategoryItem from '@/components/CategoryItem.vue';
 import LeaderBoard from '@/components/LeaderBoard.vue';
-const API_SERVER = import.meta.env.VITE_API_SERVER;
+import APIClient from '@/api_client.js';
 
 const categories = ref([]);
 
-const fetchCategories = async (query) => {
-    const response = await axios.get(`${API_SERVER}/api/category/iq/`, {
-        params: query
-    });
-    categories.value = response.data;
-}
-
-onMounted(() => {
-    fetchCategories();
+onMounted(async () => {
+    categories.value = await APIClient.getCategories();
 });
 </script>
 
