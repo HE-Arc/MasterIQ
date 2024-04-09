@@ -1,37 +1,21 @@
 <script setup>
-import axios from 'axios';
+import APIClient from '@/api_client';
 import { onMounted, ref } from 'vue';
-const API_SERVER = import.meta.env.VITE_API_SERVER;
 
-const imageUrl = ref('');
-
-const fetchImage = async () => {
-    const response = await axios.get(`${API_SERVER}/api/category/${props.id}/image/`, { responseType: 'arraybuffer' });
-    imageUrl.value = 'data:image/jpeg;base64,' + arrayBufferToBase64(response.data);
-}
-
-const arrayBufferToBase64 = (buffer) => {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-}
+const imageData = ref('');
 
 const props = defineProps({
     id: Number,
     category: Object
 })
-onMounted(() => {
-    fetchImage();
+onMounted(async () => {
+    imageData.value = await APIClient.getImageCategory(props.id);
 });
 </script>
 
 <template>
     <RouterLink class="link" :to="{ name: 'Quiz', params: { id_category: id } }">
-        <div class="category-item" :style="{ backgroundImage: 'url(' + imageUrl + ')' }">
+        <div class="category-item" :style="{ backgroundImage: 'url(' + imageData + ')' }">
             <div class="opacity-filter">
                 <h2 class="name">{{ category.category_name }}</h2>
                 <p class="iq">{{ category.user_iq }}</p>

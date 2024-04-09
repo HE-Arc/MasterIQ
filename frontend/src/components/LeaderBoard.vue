@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios';
+import APIClient from '@/api_client';
 import { defineProps, onMounted, ref } from 'vue';
 
 const props = defineProps({
@@ -13,26 +13,18 @@ const props = defineProps({
 const leaderboard = ref([]);
 const user_rank = ref(null);
 
-const fetchLeaderboard = async () => {
-    // is the global leaderboard
-    let url_rank_leaderboard = `/api/rank/global_leaderboard/`;
-    let url_rank_user = `/api/rank/global_user/`;
-
+onMounted(async () => {
     if (props.id_category !== undefined) {
         // is a category leaderboard
-        url_rank_leaderboard = `/api/rank/${props.id_category}/leaderboard/`;
-        url_rank_user = `/api/rank/${props.id_category}/user/`;
+        leaderboard.value = await APIClient.getCategoryLeaderboard(props.id_category);
+        user_rank.value = await APIClient.getCategoryUserRank(props.id_category);
     }
-
-    const response_leaderboard = await axios.get(url_rank_leaderboard);
-    leaderboard.value = response_leaderboard.data;
-
-    const response_user = await axios.get(url_rank_user);
-    user_rank.value = response_user.data;
-}
-
-onMounted(() => {
-    fetchLeaderboard();
+    else
+    {
+        // is the global leaderboard
+        leaderboard.value = await APIClient.getGlobalLeaderboard();
+        user_rank.value = await APIClient.getGlobalUserRank();
+    }
 });
 
 </script>
