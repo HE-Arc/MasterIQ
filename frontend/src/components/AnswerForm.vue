@@ -1,11 +1,6 @@
 <script setup>
-import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { defineEmits, onMounted, ref } from 'vue';
-
-// default variables
-const route = useRoute();
-const id_category = route.params.id_category;
+import { defineEmits, onMounted, ref, defineProps, watch } from 'vue';
 
 // variables specific to this component
 const emit = defineEmits(['newQuestion'])
@@ -16,6 +11,13 @@ const answer_text = ref("");
 const options = ref([]);
 
 const response_to_answer = ref(null);
+
+const props = defineProps({
+    hasAskedOptions: {
+        type: Boolean,
+        required: true,
+    }
+})
 
 const submitAnswerText = async () => {
     const response = await axios.post(`/api/question/answer_text/`, {
@@ -39,12 +41,6 @@ const fetchOptions = async () => {
     });
     options.value = response.data.options;
 }
-
-const hasAskedOptions = async () => {
-    const response = await axios.get(`/api/question/options_asked`);
-    return !!response.data.options_asked;
-}
-
 const newQuestion = () => {
     answer_sent.value = false;
     show_text_form.value = true;
@@ -52,23 +48,19 @@ const newQuestion = () => {
     emit('newQuestion');
 }
 
-const init = async () => {
-    // ask backend if the user has already ask options in this category
-    // if so, show the options form
-
-    console.log("request Has asked options")
-    const response = await hasAskedOptions();
-    console.log("response Has asked options")
-    console.log(response);
-    if (response) {
+const displayOptionsAsked = () => {
+    if (props.hasAskedOptions) {
         fetchOptions();
         show_text_form.value = false;
     }
-    // if not, show the text form (default value is true)
 }
 
 onMounted(() => {
-    init();
+    displayOptionsAsked();
+});
+
+watch(() => props.hasAskedOptions, () => {
+    displayOptionsAsked();
 });
 </script>
 
