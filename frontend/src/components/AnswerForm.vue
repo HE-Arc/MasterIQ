@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios';
+import APIClient from '@/api_client';
 import { defineEmits, onMounted, ref, defineProps, watch } from 'vue';
 
 // variables specific to this component
@@ -20,27 +20,20 @@ const props = defineProps({
 })
 
 const submitAnswerText = async () => {
-    const response = await axios.post(`/api/question/answer_text/`, {
-        answer: answer_text.value,
-    });
-    response_to_answer.value = response.data;
+    response_to_answer.value = await APIClient.postAnswerText(answer_text.value);
     answer_sent.value = true;
 }
 
-const submitAnswerOption = async (key) => {
-    const response = await axios.post(`/api/question/answer_option/`, {
-        answer: key,
-    });
-    response_to_answer.value = response.data;
+const submitAnswerOption = async (id) => {
+    response_to_answer.value = await APIClient.postAnswerOption(id);
     answer_sent.value = true;
 }
 
 const fetchOptions = async () => {
     show_text_form.value = false;
-    const response = await axios.get(`/api/question/options/`, {
-    });
-    options.value = response.data.options;
+    options.value = await APIClient.getOptions();
 }
+
 const newQuestion = () => {
     answer_sent.value = false;
     show_text_form.value = true;

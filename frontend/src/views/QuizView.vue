@@ -1,9 +1,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import AnswerForm from '@/components/AnswerForm.vue';
 import LeaderBoard from '@/components/LeaderBoard.vue';
+import APIClient from '@/api_client';
+
 // default variables
 const route = useRoute();
 const id_category = route.params.id_category;
@@ -13,13 +14,10 @@ const question = ref(null);
 const hasAskedOptions = ref(false);
 
 const fetchNewQuestion = async () => {
-    const responseQuestion = await axios.get(`/api/question/${id_category}/new`, {
-    });
-    question.value = responseQuestion.data.text;
+    question.value = await APIClient.getNewQuestion(id_category)
 
     // wait for the question before checking if the user has asked for options
-    const responseOptionAsked = await axios.get(`/api/question/options_asked`);
-    hasAskedOptions.value = !!responseOptionAsked.data.options_asked;
+    hasAskedOptions.value = await APIClient.getIfOptionsAsked();
 }
 
 onMounted(() => {
