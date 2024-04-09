@@ -15,6 +15,16 @@ from masteriqapp.serializers.QuestionSerializer import QuestionSerializer
 masteriq = apps.get_app_config("masteriqapp")
 
 
+def check_if_text_answer_is_correct(given_answer, right_answer):
+    if (right_answer.lower() == "yes" or right_answer.lower() == "true" or right_answer.lower() == "right") and (given_answer.lower() == "yes" or given_answer.lower() == "true" or given_answer.lower() == "right") :
+        return True
+    if (right_answer.lower() == "no" or right_answer.lower() == "wrong" or right_answer.lower() == "false") and (given_answer.lower() == "no" or given_answer.lower() == "wrong" or given_answer.lower() == "false") :
+        return True
+    if given_answer.lower() == right_answer.lower():
+        return True
+    return False
+
+
 class QuestionView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
     question_model = masteriq.get_model("Question")
@@ -96,9 +106,7 @@ class QuestionView(viewsets.ViewSet):
                                                                                "answer with options"})
         question = self.question_model.objects.get(pk=request.session['question'])
         right_answer = question.options.get(is_correct=True)
-        user_is_correct = False
-        if request.data['answer'].lower() == right_answer.text.lower():
-            user_is_correct = True
+        user_is_correct = check_if_text_answer_is_correct(request.data['answer'], right_answer.text)
         data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
                         "answer_sent": request.data['answer']}
         del request.session['question']
@@ -136,3 +144,5 @@ class QuestionView(viewsets.ViewSet):
         else:
             data_to_send = {"options_asked": request.session['options_asked']}
         return Response(status=status.HTTP_200_OK, data=data_to_send)
+
+
