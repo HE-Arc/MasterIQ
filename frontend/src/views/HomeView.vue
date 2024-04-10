@@ -47,9 +47,7 @@ onMounted(async () => {
     .col-wrapper {
         display: grid;
         grid-template-columns: .66fr .33fr;
-        column-gap: 1rem;
+        column-gap: 2rem;
     }
-
-    .info {}
 }
 </style>
