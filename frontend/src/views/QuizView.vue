@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import AnswerForm from '@/components/AnswerForm.vue';
 import LeaderBoard from '@/components/LeaderBoard.vue';
+import CategorieBanner from '@/components/CategorieBanner.vue';
 import APIClient from '@/api_client';
 
 // default variables
@@ -27,23 +28,45 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="quiz container">
+    <section class="quiz container col-wrapper">
         <p class="info">Answer correctly to the question and earn as many IQs as possible!</p>
-        <h1 class="title">Question</h1>
-        <p class="question box">{{ question }}</p>
-        <AnswerForm @new-question="fetchNewQuestion" :hasAskedOptions="hasAskedOptions"/>
-        <LeaderBoard :id_category="Number(id_category)"/>
+        <div class="empty-space"></div>
+        <div>
+            <h1 class="title">Question</h1>
+            <p class="question box">{{ question }}</p>
+            <AnswerForm @new-question="fetchNewQuestion" :hasAskedOptions="hasAskedOptions" />
+        </div>
+        <div>
+            <CategorieBanner class="category-banner" :id_category="Number(id_category)" />
+            <LeaderBoard :id_category="Number(id_category)" />
+        </div>
+
     </section>
 </template>
 
 <style scoped>
 .title {
     text-align: center;
-    margin-bottom: 1rem;
 }
 
 .question {
     text-align: center;
     margin-bottom: 1.3rem;
+}
+
+.category-banner {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .col-wrapper {
+        display: grid;
+        grid-template-columns: .66fr .33fr;
+        column-gap: 2rem;
+    }
+
+    .category-banner {
+        display: block;
+    }
 }
 </style>
