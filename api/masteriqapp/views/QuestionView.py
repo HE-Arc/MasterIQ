@@ -1,6 +1,6 @@
 import io
 import random
-
+import jellyfish
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django.apps import apps
@@ -15,12 +15,25 @@ from masteriqapp.serializers.QuestionSerializer import QuestionSerializer
 masteriq = apps.get_app_config("masteriqapp")
 
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
 def check_if_text_answer_is_correct(given_answer, right_answer):
-    if (right_answer.lower() == "yes" or right_answer.lower() == "true" or right_answer.lower() == "right") and (given_answer.lower() == "yes" or given_answer.lower() == "true" or given_answer.lower() == "right") :
+    if (right_answer.lower() == "yes" or right_answer.lower() == "true" or right_answer.lower() == "right") and (
+            given_answer.lower() == "yes" or given_answer.lower() == "true" or given_answer.lower() == "right"):
         return True
-    if (right_answer.lower() == "no" or right_answer.lower() == "wrong" or right_answer.lower() == "false") and (given_answer.lower() == "no" or given_answer.lower() == "wrong" or given_answer.lower() == "false") :
+    if (right_answer.lower() == "no" or right_answer.lower() == "wrong" or right_answer.lower() == "false") and (
+            given_answer.lower() == "no" or given_answer.lower() == "wrong" or given_answer.lower() == "false"):
         return True
-    if given_answer.lower() == right_answer.lower():
+    if is_number(right_answer):
+        if given_answer == right_answer:
+            return True
+    elif jellyfish.damerau_levenshtein_distance(given_answer.lower(), right_answer.lower()) < 3:
         return True
     return False
 
@@ -111,7 +124,7 @@ class QuestionView(viewsets.ViewSet):
                         "answer_sent": request.data['answer']}
         del request.session['question']
         del request.session['options_asked']
-        #TODO: add points to user when connexion is implemented
+        # TODO: add points to user when connexion is implemented
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
     @action(detail=False, methods=["POST"], url_path="answer_option")
@@ -134,7 +147,7 @@ class QuestionView(viewsets.ViewSet):
                         "answer_sent": answer_sent.text}
         del request.session['question']
         del request.session['options_asked']
-        #TODO: add points to user when connexion is implemented
+        # TODO: add points to user when connexion is implemented
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
     @action(detail=False, methods=["GET"])
@@ -144,5 +157,3 @@ class QuestionView(viewsets.ViewSet):
         else:
             data_to_send = {"options_asked": request.session['options_asked']}
         return Response(status=status.HTTP_200_OK, data=data_to_send)
-
-
