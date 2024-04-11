@@ -10,9 +10,8 @@ const randomId = ref(0);
 
 onMounted(async () => {
     categories.value = await APIClient.getCategories();
-    
     // get a random category id for the random category button
-    randomId.value = Math.floor(Math.random() * Object.keys(categories.value).length);
+    randomId.value = Math.floor(Math.random() * Object.keys(categories.value).length) + 1;
 });
 </script>
 
