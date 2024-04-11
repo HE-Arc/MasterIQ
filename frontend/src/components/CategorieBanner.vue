@@ -10,7 +10,6 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-    console.log(props.id_category);
     imageData.value = await APIClient.getImageCategory(props.id_category);
     imageLoaded.value = true;
 });
