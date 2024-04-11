@@ -5,9 +5,14 @@ import LeaderBoard from '@/components/LeaderBoard.vue';
 import APIClient from '@/api_client.js';
 
 const categories = ref([]);
+const randomId = ref(0);
+
 
 onMounted(async () => {
     categories.value = await APIClient.getCategories();
+    
+    // get a random category id for the random category button
+    randomId.value = Math.floor(Math.random() * Object.keys(categories.value).length);
 });
 </script>
 
@@ -22,7 +27,7 @@ onMounted(async () => {
                 <CategoryItem v-for="category, key in categories" :id="parseInt(key)" :category></CategoryItem>
             </div>
             <div class="btn-container">
-                <button class="btn">Random question</button>
+                <RouterLink class="btn" :to="{ name: 'Quiz', params: { id_category: randomId } }">Random category</RouterLink>
             </div>
         </div>
         <LeaderBoard />
