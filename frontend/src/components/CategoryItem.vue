@@ -3,6 +3,7 @@ import APIClient from '@/api_client';
 import { onMounted, ref } from 'vue';
 
 const imageData = ref('');
+const imageLoaded = ref(false);
 
 const props = defineProps({
     id: Number,
@@ -10,31 +11,45 @@ const props = defineProps({
 })
 onMounted(async () => {
     imageData.value = await APIClient.getImageCategory(props.id);
+    imageLoaded.value = true;
 });
 </script>
 
 <template>
-    <RouterLink class="link" :to="{ name: 'Quiz', params: { id_category: id } }">
-        <div class="category-item" :style="{ backgroundImage: 'url(' + imageData + ')' }">
-            <div class="opacity-filter">
-                <h2 class="name">{{ category.category_name }}</h2>
-                <p class="iq">{{ category.user_iq }}</p>
+    <Transition>
+        <RouterLink v-if="imageLoaded" class="link" :to="{ name: 'Quiz', params: { id_category: id } }">
+            <div class="category-item" :style="{ backgroundImage: 'url(' + imageData + ')' }">
+                <div class="opacity-filter">
+                    <h2 class="name">{{ category.category_name }}</h2>
+                    <p class="iq">{{ category.user_iq }}</p>
+                </div>
             </div>
-        </div>
-    </RouterLink>
+        </RouterLink>
+    </Transition>
 </template>
 
 <style scoped style="scss">
-.link
-{
+.v-enter-active,
+.v-leave-active {
+    transition: all 1s ease !important;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.link {
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease-in-out;
-    &:hover
-    {
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
         transform: scale(1.05);
     }
 }
+
 .category-item {
     border-radius: 1.5rem;
     background-position: center;
