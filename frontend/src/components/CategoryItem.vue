@@ -1,5 +1,6 @@
 <script setup>
 import APIClient from '@/api_client';
+import IconMedal from './icons/IconMedal.vue';
 import { onMounted, ref } from 'vue';
 
 const imageData = ref('');
@@ -9,6 +10,19 @@ const props = defineProps({
     id: Number,
     category: Object
 })
+
+const colorFromIQ = (iq) => {
+    if (iq < 100) {
+        return null;
+    } else if (iq < 120) {
+        return '#CD7F32';
+    } else if (iq < 170) {
+        return '#C0C0C0';
+    } else {
+        return '#FFD700';
+    }
+}
+
 onMounted(async () => {
     imageData.value = await APIClient.getImageCategory(props.id);
     imageLoaded.value = true;
@@ -23,6 +37,7 @@ onMounted(async () => {
                     <h2 class="name">{{ category.category_name }}</h2>
                     <p class="iq">{{ category.user_iq }}</p>
                 </div>
+                <IconMedal class="icon-medal" :rgb_color="colorFromIQ(category.user_iq)" />
             </div>
         </RouterLink>
     </Transition>
@@ -56,6 +71,7 @@ onMounted(async () => {
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
+    position: relative;
 
     .opacity-filter {
         background-color: rgba(0, 0, 0, 0.5);
@@ -78,6 +94,14 @@ onMounted(async () => {
         color: white;
         font-size: 1.2rem;
         font-weight: 600;
+    }
+
+    .icon-medal
+    {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        width: 35px;
     }
 }
 </style>
