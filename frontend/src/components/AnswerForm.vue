@@ -1,6 +1,7 @@
 <script setup>
 import APIClient from '@/api_client';
 import { defineEmits, onMounted, ref, defineProps, watch } from 'vue';
+import AnswerMessage from '@/components/AnswerMessage.vue';
 
 // variables specific to this component
 const emit = defineEmits(['newQuestion'])
@@ -68,25 +69,13 @@ watch(() => props.hasAskedOptions, () => {
             <button class="btn" @click="fetchOptions">Ask options</button>
         </div>
         <div v-else>
-            <p v-if="response_to_answer.user_is_correct" class="right-answer info-answer box">
-                Good job! "{{ response_to_answer.right_answer }}" was the right answer!
-            </p>
-            <p v-else class="wrong-answer info-answer box">
-                Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
-        response_to_answer.right_answer }}".
-            </p>
+            <AnswerMessage :response_to_answer="response_to_answer" />
             <button class="btn" @click="newQuestion">Next question</button>
         </div>
     </div>
     <div v-else class="answer-options">
         <div v-if="answer_sent">
-            <p v-if="response_to_answer.user_is_correct" class="right-answer info-answer box">Good job, "{{
-        response_to_answer.right_answer }}"
-                was the right answer!</p>
-            <p v-else class="wrong-answer info-answer box">
-                Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
-        response_to_answer.right_answer }}"</p>
-
+            <AnswerMessage :response_to_answer="response_to_answer" />
             <button class="btn" @click="newQuestion">Next question</button>
         </div>
         <div v-else class="box">
@@ -136,21 +125,5 @@ watch(() => props.hasAskedOptions, () => {
             margin-bottom: 0;
         }
     }
-}
-
-.info-answer {
-    font-weight: bold;
-    padding: 1rem 2rem;
-    margin-bottom: 1.3rem;
-}
-
-.right-answer {
-    background-color: var(--color-background-right);
-    color: var(--color-right);
-}
-
-.wrong-answer {
-    background-color: var(--color-background-wrong);
-    color: var(--color-wrong);
 }
 </style>
