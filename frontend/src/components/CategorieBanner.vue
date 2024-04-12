@@ -5,6 +5,8 @@ import { onMounted, defineProps, ref } from 'vue';
 const imageData = ref('');
 const imageLoaded = ref(false);
 
+const categoryName = ref('');
+
 const props = defineProps({
     id_category: Number
 })
@@ -12,6 +14,8 @@ const props = defineProps({
 onMounted(async () => {
     imageData.value = await APIClient.getImageCategory(props.id_category);
     imageLoaded.value = true;
+
+    categoryName.value = await APIClient.getCategoryName(props.id_category);
 });
 </script>
 
@@ -21,7 +25,7 @@ onMounted(async () => {
             <h2 class="title">Categorie</h2>
             <div class="category-banner" :style="{ backgroundImage: 'url(' + imageData + ')' }">
                 <div class="opacity-filter">
-                    <span class="category-name">Politique</span> <!-- TODO -->
+                    <span class="category-name">{{ categoryName }}</span>
                 </div>
             </div>
         </div>

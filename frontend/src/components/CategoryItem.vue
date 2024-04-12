@@ -12,11 +12,11 @@ const props = defineProps({
 })
 
 const colorFromIQ = (iq) => {
-    if (iq < 100) {
+    if (iq < 110) {
         return null;
-    } else if (iq < 120) {
+    } else if (iq < 150) {
         return '#CD7F32';
-    } else if (iq < 170) {
+    } else if (iq < 180) {
         return '#C0C0C0';
     } else {
         return '#FFD700';
