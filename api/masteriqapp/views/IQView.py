@@ -41,3 +41,8 @@ class IQView(viewsets.ViewSet):
     @action(detail=True, methods=["GET"])
     def user_iq(self, request, pk):
         return Response(status=status.HTTP_200_OK, data={"user_iq": random.randint(1, 200)})
+
+    @action(detail=True, methods=["GET"], url_path="name")
+    def category_name(self, request, pk):
+        category = get_object_or_404(self.queryset, pk=pk)
+        return Response(status=status.HTTP_200_OK, data={"category_name": category.name})
