@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import AnswerForm from '@/components/AnswerForm.vue';
 import LeaderBoard from '@/components/LeaderBoard.vue';
 import CategorieBanner from '@/components/CategorieBanner.vue';
+import GraphSection from '@/components/GraphSection.vue';
 import APIClient from '@/api_client';
 
 // default variables
@@ -20,9 +21,16 @@ const fetchNewQuestion = async () => {
     // wait for the question before checking if the user has asked for options
     hasAskedOptions.value = await APIClient.getIfOptionsAsked();
 }
+// Fetch user IQ and add it to the graph 
+const graphComponent = ref(null);
+const fetchUserIQ = async () => {
+    const response = await APIClient.getUserIQ();
+    graphComponent.value.addData(response.user_iq);
+}
 
 onMounted(() => {
     fetchNewQuestion();
+    fetchUserIQ();
 });
 
 </script>
@@ -34,10 +42,12 @@ onMounted(() => {
         <div>
             <h1 class="title">Question</h1>
             <p class="question box">{{ question }}</p>
-            <AnswerForm @new-question="fetchNewQuestion" :hasAskedOptions="hasAskedOptions" />
+            <AnswerForm @new-question="fetchNewQuestion" @update-user-iq="fetchUserIQ"
+                :hasAskedOptions="hasAskedOptions" />
         </div>
         <div>
             <CategorieBanner class="category-banner" :id_category="Number(id_category)" />
+            <GraphSection ref="graphComponent" />
             <LeaderBoard :id_category="Number(id_category)" />
         </div>
 
