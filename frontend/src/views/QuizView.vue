@@ -24,8 +24,8 @@ const fetchNewQuestion = async () => {
 // Fetch user IQ and add it to the graph 
 const graphComponent = ref(null);
 const fetchUserIQ = async () => {
-    const response = await APIClient.getUserIQ();
-    graphComponent.value.addData(response.user_iq);
+    const userIq = await APIClient.getUserIQ();
+    graphComponent.value.addData(userIq);
 }
 
 onMounted(() => {

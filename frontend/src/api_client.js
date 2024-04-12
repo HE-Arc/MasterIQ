@@ -18,6 +18,16 @@ export default
     }
 
     /**
+     * 
+     * @param {Number} category_id 
+     * @returns {String} category name
+     */
+    static async getCategoryName(category_id) {
+        const response = await axios.get(`/api/category/${category_id}/name`);
+        return response.data.category_name;
+    }
+
+    /**
      * Get a new question for a given category
      * @param {Number} category_id 
      * @returns {String} question text
@@ -70,11 +80,11 @@ export default
 
     /**
      * Get the current user IQ. It's the best players average IQ in all categories
-     * @returns {Object} {user_iq: Number}
+     * @returns {Number} user IQ
      */
     static async getUserIQ(category_id) {
         const response = await axios.get(`/api/category/${category_id}/user_iq`);
-        return response.data;
+        return response.data.user_iq;
     }
 
     /**
