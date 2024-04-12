@@ -181,4 +181,25 @@ export default
             throw new Error('Error logging in: ' + error.message);
         }
     }
+
+    /**
+     * Post a new community question to the API.
+     * @param {String} question - The text of the new question.
+     * @param {Array<String>} options - An array of options for the question.
+     * @returns {Object} An object containing information about the posted question:
+     *                    {
+     *                      user_is_correct: Boolean, // Indicates if the user's answer was correct.
+     *                      right_answer: String,      // The correct answer to the question.
+     *                      answer_sent: String        // The answer that was submitted.
+     *                    }
+     */
+    static async postNewCommunityQuestion(question, options) {
+        const response = await axios.post(`/api/question/new_community/`, {
+            question,
+            options,
+            answer: '0'
+        });
+
+        return response.data;
+    }
 }
