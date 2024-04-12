@@ -4,7 +4,7 @@ import { defineEmits, onMounted, ref, defineProps, watch } from 'vue';
 import AnswerMessage from '@/components/AnswerMessage.vue';
 
 // variables specific to this component
-const emit = defineEmits(['newQuestion'])
+const emit = defineEmits(['newQuestion', 'updateUserIq'])
 const answer_sent = ref(false);
 const show_text_form = ref(true);
 const answer_text = ref("");
@@ -23,11 +23,13 @@ const props = defineProps({
 const submitAnswerText = async () => {
     response_to_answer.value = await APIClient.postAnswerText(answer_text.value);
     answer_sent.value = true;
+    emit('updateUserIq');
 }
 
 const submitAnswerOption = async (id) => {
     response_to_answer.value = await APIClient.postAnswerOption(id);
     answer_sent.value = true;
+    emit('updateUserIq');
 }
 
 const fetchOptions = async () => {

@@ -60,7 +60,7 @@ export default
             }
             return btoa(binary);
         }
-        
+
         const response = await axios.get(`/api/category/${category_id}/image/`,
             {
                 responseType: 'arraybuffer'
@@ -69,11 +69,19 @@ export default
     }
 
     /**
+     * Get the current user IQ. It's the best players average IQ in all categories
+     * @returns {Object} {user_iq: Number}
+     */
+    static async getUserIQ(category_id) {
+        const response = await axios.get(`/api/category/${category_id}/user_iq`);
+        return response.data;
+    }
+
+    /**
      * Get the global leaderboard. It's the best players average IQ in all categories
      * @returns {Array} [{user_id: Number, user_name: String, user_score: Number}]
      */
-    static async getGlobalLeaderboard()
-    {
+    static async getGlobalLeaderboard() {
         const response = await axios.get(`/api/rank/global_leaderboard/`);
         return response.data;
     }
@@ -81,8 +89,7 @@ export default
      * Get the global leaderboard specific to a category. It's the players with the best IQ in this category id
      * @returns {Array} [{user_id: Number, user_name: String, user_score: Number}]
      */
-    static async getCategoryLeaderboard(category_id)
-    {
+    static async getCategoryLeaderboard(category_id) {
         const response = await axios.get(`/api/rank/${category_id}/leaderboard/`);
         return response.data;
     }
@@ -91,8 +98,7 @@ export default
      * Get the global user rank based on average IQ in all categories of the connected player
      * @returns {Object} {user_rank: Number, user_score: Number}
      */
-    static async getGlobalUserRank()
-    {
+    static async getGlobalUserRank() {
         const response = await axios.get(`/api/rank/global_user/`);
         return response.data;
     }
@@ -101,8 +107,7 @@ export default
      * Get the user rank specific to a category.
      * @returns {Object} {user_rank: Number, user_score: Number}
      */
-    static async getCategoryUserRank(category_id)
-    {
+    static async getCategoryUserRank(category_id) {
         const response = await axios.get(`/api/rank/${category_id}/user/`);
         return response.data;
     }
