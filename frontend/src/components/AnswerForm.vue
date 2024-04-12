@@ -1,14 +1,10 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import axios from 'axios';
-import { defineEmits, onMounted, ref } from 'vue';
-
-// default variables
-const route = useRoute();
-const id_category = route.params.id_category;
+import APIClient from '@/api_client';
+import { defineEmits, onMounted, ref, defineProps, watch } from 'vue';
+import AnswerMessage from '@/components/AnswerMessage.vue';
 
 // variables specific to this component
-const emit = defineEmits(['newQuestion'])
+const emit = defineEmits(['newQuestion', 'updateUserIq'])
 const answer_sent = ref(false);
 const show_text_form = ref(true);
 const answer_text = ref("");
@@ -17,32 +13,28 @@ const options = ref([]);
 
 const response_to_answer = ref(null);
 
+const props = defineProps({
+    hasAskedOptions: {
+        type: Boolean,
+        required: true,
+    }
+})
+
 const submitAnswerText = async () => {
-    const response = await axios.post(`/api/question/answer_text/`, {
-        answer: answer_text.value,
-    });
-    response_to_answer.value = response.data;
+    response_to_answer.value = await APIClient.postAnswerText(answer_text.value);
     answer_sent.value = true;
+    emit('updateUserIq');
 }
 
-const submitAnswerOption = async (key) => {
-    const response = await axios.post(`/api/question/answer_option/`, {
-        answer: key,
-    });
-    response_to_answer.value = response.data;
+const submitAnswerOption = async (id) => {
+    response_to_answer.value = await APIClient.postAnswerOption(id);
     answer_sent.value = true;
+    emit('updateUserIq');
 }
 
 const fetchOptions = async () => {
     show_text_form.value = false;
-    const response = await axios.get(`/api/question/options/`, {
-    });
-    options.value = response.data.options;
-}
-
-const hasAskedOptions = async () => {
-    const response = await axios.get(`/api/question/has_asked_options/`); // TODO
-    return !!response.data.has_asked_options; // TODO
+    options.value = await APIClient.getOptions();
 }
 
 const newQuestion = () => {
@@ -52,16 +44,19 @@ const newQuestion = () => {
     emit('newQuestion');
 }
 
-onMounted(() => {
-    // ask backend if the user has already ask options in this category
-    // if so, show the options form
-    /*
-    if (hasAskedOptions()) {
+const displayOptionsAsked = () => {
+    if (props.hasAskedOptions) {
         fetchOptions();
         show_text_form.value = false;
-    }*/
-    // if not, show the text form (default value is true)
+    }
+}
 
+onMounted(() => {
+    displayOptionsAsked();
+});
+
+watch(() => props.hasAskedOptions, () => {
+    displayOptionsAsked();
 });
 </script>
 
@@ -76,25 +71,13 @@ onMounted(() => {
             <button class="btn" @click="fetchOptions">Ask options</button>
         </div>
         <div v-else>
-            <p v-if="response_to_answer.user_is_correct" class="right-answer info-answer box">
-                Good job! {{ response_to_answer.right_answer }} was the right answer!
-            </p>
-            <p v-else class="wrong-answer info-answer box">
-                Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
-        response_to_answer.right_answer }}".
-            </p>
+            <AnswerMessage :response_to_answer="response_to_answer" />
             <button class="btn" @click="newQuestion">Next question</button>
         </div>
     </div>
     <div v-else class="answer-options">
         <div v-if="answer_sent">
-            <p v-if="response_to_answer.user_is_correct" class="right-answer info-answer box">Good job, "{{
-        response_to_answer.right_answer }}"
-                was the right answer!</p>
-            <p v-else class="wrong-answer info-answer box">
-                Unfortunately, your answer "{{ response_to_answer.answer_sent }}" was wrong. The correct answer was "{{
-        response_to_answer.right_answer }}"</p>
-        
+            <AnswerMessage :response_to_answer="response_to_answer" />
             <button class="btn" @click="newQuestion">Next question</button>
         </div>
         <div v-else class="box">
@@ -144,21 +127,5 @@ onMounted(() => {
             margin-bottom: 0;
         }
     }
-}
-
-.info-answer {
-    font-weight: bold;
-    padding: 1rem 2rem;
-    margin-bottom: 1.3rem;
-}
-
-.right-answer {
-    background-color: var(--color-background-right);
-    color: var(--color-right);
-}
-
-.wrong-answer {
-    background-color: var(--color-background-wrong);
-    color: var(--color-wrong);
 }
 </style>

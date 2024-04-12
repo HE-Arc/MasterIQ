@@ -26,7 +26,7 @@ class RouteTestCases(TestCase):
         response = c.get("/api/question/options/")
         assert response.status_code == 200
         assert response.json()['question_id'] is not None
-        assert response.json()['number_of_question'] is not None
+        assert response.json()['number_of_options'] is not None
         assert response.json()['options'] is not None
         assert len(response.json()['options']) >= 2
 

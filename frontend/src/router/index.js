@@ -20,17 +20,17 @@ const router = createRouter({
       component: () => import('../views/AddQuestionView.vue')
     },
     {
-      path: 'Authentication/login',
+      path: '/login',
       name: 'Login',
       component: () => import('../views/Authentication/LoginView.vue')
     },
     {
-      path: 'Authentication/logout',
+      path: '/logout',
       name: 'Logout',
       component: () => import('../views/Authentication/LogoutView.vue')
     },
     {
-      path: 'Authentication/Signup',
+      path: '/signup',
       name: 'Signup',
       component: () => import('../views/Authentication/SignUpView.vue')
     }

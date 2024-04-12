@@ -33,10 +33,12 @@ h4
   font-size: 1rem;
   color: var(--color-text);
   background-color: var(--color-background-btn);
+  line-height: 1.2;
 }
 .btn:hover
 {
   background-color: var(--color-background-btn-hover);
+  text-decoration: none;
 }
 
 
@@ -49,6 +51,7 @@ h4
   padding: 2rem;
   background-color: var(--color-background-soft);
   border-radius: 27px;
+  margin-bottom: 2rem;
 }
 
 .title
@@ -71,7 +74,4 @@ h4
   a:hover {
     text-decoration: underline;
   }
-}
-
-@media (min-width: 1024px) {
 }

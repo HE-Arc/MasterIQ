@@ -1,33 +1,33 @@
 <script setup>
-import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import CategoryItem from '@/components/CategoryItem.vue';
 import LeaderBoard from '@/components/LeaderBoard.vue';
-const API_SERVER = import.meta.env.VITE_API_SERVER;
+import APIClient from '@/api_client.js';
 
 const categories = ref([]);
+const randomId = ref(0);
 
-const fetchCategories = async (query) => {
-    const response = await axios.get(`${API_SERVER}/api/category/iq/`, {
-        params: query
-    });
-    categories.value = response.data;
-}
 
-onMounted(() => {
-    fetchCategories();
+onMounted(async () => {
+    categories.value = await APIClient.getCategories();
+    // get a random category id for the random category button
+    randomId.value = Math.floor(Math.random() * Object.keys(categories.value).length) + 1;
 });
 </script>
 
 <template>
-    <main class="container">
-        <p class="info">Maximise your IQs in each question category and climb the overall rankings.</p>
-        <h1 class="title">Categories</h1>
-        <div class="all-categories">
-            <CategoryItem v-for="category, key in categories" :id="parseInt(key)" :category></CategoryItem>
-        </div>
-        <div class="btn-container">
-            <button class="btn">Random question</button>
+    <main class="container col-wrapper">
+        <p class="info">Maximise your IQ by correctly answering the questions in the different categories below and
+            climb the leaderboard to become the best.</p>
+        <div class="empty-space"></div>
+        <div>
+            <h1 class="title">Categories</h1>
+            <div class="all-categories">
+                <CategoryItem v-for="category, key in categories" :id="parseInt(key)" :category></CategoryItem>
+            </div>
+            <div class="btn-container">
+                <RouterLink class="btn" :to="{ name: 'Quiz', params: { id_category: randomId } }">Random category</RouterLink>
+            </div>
         </div>
         <LeaderBoard />
     </main>
@@ -36,14 +36,22 @@ onMounted(() => {
 <style scoped>
 .all-categories {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     row-gap: 1rem;
-    column-gap: 1.5rem;
+    column-gap: 1rem;
 }
 
 .btn-container {
     display: flex;
     justify-content: center;
     padding: 2rem 0;
+}
+
+@media (min-width: 1024px) {
+    .col-wrapper {
+        display: grid;
+        grid-template-columns: .66fr .33fr;
+        column-gap: 2rem;
+    }
 }
 </style>
