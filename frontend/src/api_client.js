@@ -145,4 +145,40 @@ export default
         });
         return response.data;
     }
+
+    /**
+     * Register a new user
+     * @param {String} username The username of the new user
+     * @param {String} password The password of the new user
+     * @returns {Object} The response data from the API
+     */
+    static async registerUser(username, password) {
+        try {
+            const response = await axios.post('/api/user/signup/', {
+                username,
+                password
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error('Error registering user: ' + error.message);
+        }
+    }
+
+    /**
+     * Log in an existing user
+     * @param {String} username The username of the user
+     * @param {String} password The password of the user
+     * @returns {Object} The response data from the API
+     */
+    static async loginUser(username, password) {
+        try {
+            const response = await axios.post('/api/user/login/', {
+                username,
+                password
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error('Error logging in: ' + error.message);
+        }
+    }
 }
