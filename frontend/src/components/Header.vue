@@ -10,6 +10,8 @@ import { RouterLink } from 'vue-router'
         <RouterLink to="/">Categories</RouterLink>
         <RouterLink to="/add-question">Add question</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/logout">Logout</RouterLink>
+        <RouterLink to="/signup">SignUp</RouterLink>
       </nav>
     </div>
   </header>
