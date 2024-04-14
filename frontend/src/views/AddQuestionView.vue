@@ -81,27 +81,8 @@ const submitForm = () => {
     align-items: center;
 }
 
-.title {
+.title, .info {
     text-align: center;
-    margin-bottom: 1.3rem;
-}
-
-.info {
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-
-.form-wrapper {
-    width: 100%;
-    max-width: 100%;
-    padding: 0 1rem;
-    box-sizing: border-box;
-}
-
-.button-wrapper {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: center;
 }
 
 .success-message {
