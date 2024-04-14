@@ -45,7 +45,6 @@ class AuthenticationView(viewsets.ViewSet):
         for category in categories:
             try:
                 already_existing_entry = self.iq_model.objects.get_iq_of_user_in_category(user=user, category=category)
-                print(already_existing_entry)
             except masteriqapp.models.IQ.DoesNotExist:
                 self.iq_model.objects.create(user=user, category=category, iq=100)
 
