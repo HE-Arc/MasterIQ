@@ -39,12 +39,17 @@ const login = async () => {
 <template>
     <div>
         <section class="login-form container">
-            <h1>Login</h1>
+            <div>
+              <h1 class="title">Login</h1>
+              <p class="info">Log in here</p>
+            </div>
             <p :class="{ 'success-message': validationMessage === 'Login successful.' }">{{ validationMessage }}</p>
-            <form @submit.prevent="login" @keyup.enter="login" style="text-align: center;">
-                <CustomInput label="Username" v-model="username" required />
-                <CustomInput label="Password" v-model="password" type="password" required/>
-                <div style="margin-top: 20px;">
+            <form @submit.prevent="login" @keyup.enter="login" class="form-wrapper">
+                <div class="box">
+                  <CustomInput label="Username" v-model="username" required />
+                  <CustomInput label="Password" v-model="password" type="password" required/>
+                </div>
+                <div class="button-wrapper">
                     <button type="submit" class="btn">Login</button>
                 </div>
             </form>
@@ -52,8 +57,51 @@ const login = async () => {
     </div>
 </template>
 
-<style>
+<style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 1.3rem;
+}
+
+.info {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.button-wrapper {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
 .success-message {
     color: green;
 }
+
+@media (min-width: 576px) {
+    .form-wrapper {
+        max-width: 90%;
+    }
+}
+
+
+@media (min-width: 1024px) {
+    .form-wrapper {
+        max-width: 70%;
+    }
+}
+
 </style>
