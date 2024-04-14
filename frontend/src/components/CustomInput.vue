@@ -45,14 +45,14 @@ const onChange = (event) => {
 <template>
     <div class="input-container">
         <label v-if="hasLabel" :for="name">{{ label }}<span v-if="props.required">*</span></label>
-        <input :type="type" :id="name" :name="name" :value="modelValue" @input="onInput" @change="onChange" maxlength="25" :required="required"/>
+        <input :type="type" :id="name" :name="name" :value="modelValue" @input="onInput" @change="onChange" maxlength="250" :required="required"/>
     </div>
 </template>
 
 <style scoped>
-input 
+input
 {
-    display: block; 
+    display: block;
     width: 100%;
     padding: 0.5rem 1rem;
     border-radius: 2rem;
