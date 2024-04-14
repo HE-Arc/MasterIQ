@@ -5,6 +5,23 @@ const API_SERVER = import.meta.env.VITE_API_SERVER;
 axios.defaults.baseURL = API_SERVER;
 axios.defaults.withCredentials = true;
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+axios.defaults.headers.post['X-CSRFToken'] = csrftoken;
 export default
     class APIClient {
     /**
@@ -141,7 +158,7 @@ export default
      */
     static async postAnswerOption(option_id) {
         const response = await axios.post(`/api/question/answer_option/`, {
-            answer: option_id,
+            "answer": option_id,
         });
         return response.data;
     }
@@ -189,13 +206,22 @@ export default
      * @returns {Object} {"text": String, "category": String }
      */
     static async postNewCommunityQuestion(question, options) {
-        const response = await axios.post(`/api/question/new_community/`, {
+        const
+        response = await axios.post(`/api/question/new_community/`, {
             question,
             options,
             answer: '0'
         });
+        return  response.data;
+    }
 
-        return response.data;
+    static async logOutUser() {
+        try {
+            const response = await axios.post('/api/user/logout/',);
+            return response.data;
+        } catch (error) {
+            throw new Error('Error logging out: ' + error.message);
+        }
     }
 }
 

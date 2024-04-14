@@ -30,10 +30,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(strtobool(os.getenv('DEBUG')))
 
 ALLOWED_HOSTS = [
-    os.getenv('BACKEND_HOST')
+    os.getenv('BACKEND_HOST'),
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    os.getenv('FRONTEND_URL'),
+    os.getenv('BACKEND_URL'),
+]
+
+CSRF_TRUSTED_ORIGINS = [
     os.getenv('FRONTEND_URL'),
     os.getenv('BACKEND_URL'),
 ]
@@ -49,9 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'masteriqapp',
     'rest_framework',
-    "corsheaders",
+
 ]
 
 MIDDLEWARE = [
