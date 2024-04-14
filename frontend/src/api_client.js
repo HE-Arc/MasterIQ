@@ -154,7 +154,7 @@ export default
      */
     static async registerUser(username, password) {
         try {
-            const response = await axios.post('/api/user/signup/', {
+            const response = await axios.post('/api/user/register/', {
                 username,
                 password
             });

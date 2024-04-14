@@ -24,12 +24,12 @@ class AuthenticationView(viewsets.ViewSet):
         return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
-    def signup(self, request):
+    def register(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
         if not User.objects.filter(username=username).exists():
             user = User.objects.create_user(username=username, password=password)
             login(request, user)
-            return Response({'message': 'Signup successful'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Register successful'}, status=status.HTTP_201_CREATED)
         else:
             return Response({'message': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)

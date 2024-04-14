@@ -40,7 +40,7 @@ const register = async () => {
 
 <template>
     <div>
-        <section class="signUp-form container">
+        <section class="Register-form container">
             <div>
                 <h1 class="title">Register</h1>
                 <p class="info">Create a new account</p>
