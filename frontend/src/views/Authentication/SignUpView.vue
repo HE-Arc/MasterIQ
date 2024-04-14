@@ -12,6 +12,7 @@ const clearForm = () => {
     username.value = '';
     password.value = '';
     confirmPassword.value = '';
+    validationMessage.value = '';
 };
 
 const register = async () => {
@@ -39,14 +40,19 @@ const register = async () => {
 
 <template>
     <div>
-        <section class="register-form container">
-            <h1>Register</h1>
+        <section class="signUp-form container">
+            <div>
+                <h1 class="title">Register</h1>
+                <p class="info">Create a new account</p>
+            </div>
             <p :class="{ 'success-message': validationMessage === 'Registration successful.' }">{{ validationMessage }}</p>
-            <form @submit.prevent="signUp" @keyup.enter="signUp" style="text-align: center;">
-                <CustomInput label="Username" v-model="username" required />
-                <CustomInput label="Password" v-model="password" type="password" required />
-                <CustomInput label="Confirm Password" v-model="confirmPassword" type="password" required />
-                <div style="margin-top: 20px;">
+            <form @submit.prevent="register" @keyup.enter="register" class="form-wrapper">
+                <div class="box">
+                    <CustomInput label="Username" v-model="username" required />
+                    <CustomInput label="Password" v-model="password" type="password" required />
+                    <CustomInput label="Confirm Password" v-model="confirmPassword" type="password" required />
+                </div>
+                <div class="button-wrapper">
                     <button type="submit" class="btn">Register</button>
                 </div>
             </form>
@@ -54,9 +60,30 @@ const register = async () => {
     </div>
 </template>
 
+<style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-<style>
+.title, .info {
+    text-align: center;
+}
+
 .success-message {
     color: green;
+}
+
+@media (min-width: 576px) {
+    .form-wrapper {
+        max-width: 90%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .form-wrapper {
+        max-width: 70%;
+    }
 }
 </style>

@@ -50,26 +50,57 @@ const submitForm = () => {
 };
 </script>
 
-
 <template>
-    <section class="add-question container">
-        <h1>Add your question on this page</h1>
-        <!--For mid eval only-->
+    <section class="add-question container form-wrapper">
+        <div>
+            <h1 class="title">Add your question</h1>
+            <p class="info">Help us become the best quiz game ever by adding your amazing new question!</p>
+        </div>
         <p :class="{ 'success-message': validationMessage === 'Question saved successfully.' }">{{ validationMessage }}</p>
-        <form @submit.prevent="submitForm">
-            <CustomInput label="Question" v-model="question" required />
-            <CustomInput label="Correct Answer" v-model="correctAnswer" required />
-            <CustomInput label="Wrong Answer 1" v-model="wrongAnswer1" required />
-            <CustomInput label="Wrong Answer 2" v-model="wrongAnswer2" required/>
-            <CustomInput label="Wrong Answer 3" v-model="wrongAnswer3" required/>
-            <button type="submit" class="btn">Submit</button>
+        <form @submit.prevent="submitForm" class="form-wrapper">
+            <div class="box">
+                <CustomInput label="Question" v-model="question" required />
+            </div>
+            <div class="box">
+                <CustomInput label="Correct Answer" v-model="correctAnswer" required />
+                <CustomInput label="Wrong Answer 1" v-model="wrongAnswer1" required />
+                <CustomInput label="Wrong Answer 2" v-model="wrongAnswer2" required />
+                <CustomInput label="Wrong Answer 3" v-model="wrongAnswer3" required />
+            </div>
+            <div class="button-wrapper">
+                <button type="submit" class="btn">Submit</button>
+            </div>
         </form>
     </section>
 </template>
 
-// For mid eval only
-<style>
+<style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title, .info {
+    text-align: center;
+}
+
 .success-message {
     color: green;
 }
+
+@media (min-width: 576px) {
+    .form-wrapper {
+        max-width: 90%;
+    }
+}
+
+
+@media (min-width: 1024px) {
+    .form-wrapper {
+        max-width: 70%;
+    }
+}
+
 </style>
+
