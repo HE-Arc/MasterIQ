@@ -19,6 +19,7 @@ class IQView(viewsets.ViewSet):
     iq_model = masteriq.get_model("IQ")
     queryset = category_model.objects.all()
     permission_classes = (IsAuthenticated,)
+
     @action(detail=True, methods=["GET"], url_path="image")
     def category_image(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
