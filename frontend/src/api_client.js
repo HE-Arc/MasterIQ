@@ -181,4 +181,62 @@ export default
             throw new Error('Error logging in: ' + error.message);
         }
     }
+
+    /**
+     * Post a new community question to the API.
+     * @param {String} question - The text of the new question.
+     * @param {Array<String>} options - An array of options for the question.
+     * @returns {Object} An object containing information about the posted question:
+     *                    {
+     *                      user_is_correct: Boolean, // Indicates if the user's answer was correct.
+     *                      right_answer: String,      // The correct answer to the question.
+     *                      answer_sent: String        // The answer that was submitted.
+     *                    }
+     */
+    static async postNewCommunityQuestion(question, options) {
+        const response = await axios.post(`/api/question/new_community/`, {
+            question,
+            options,
+            answer: '0'
+        });
+
+        return response.data;
+    }
+
+    /**
+     * Register a new user
+     * @param {String} username The username of the new user
+     * @param {String} password The password of the new user
+     * @returns {Object} The response data from the API
+     */
+    static async registerUser(username, password) {
+        try {
+            const response = await axios.post('/api/user/register/', {
+                username,
+                password
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error('Error registering user: ' + error.message);
+        }
+    }
+
+    /**
+     * Log in an existing user
+     * @param {String} username The username of the user
+     * @param {String} password The password of the user
+     * @returns {Object} The response data from the API
+     */
+    static async loginUser(username, password) {
+        try {
+            const response = await axios.post('/api/user/login/', {
+                username,
+                password
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error('Error logging in: ' + error.message);
+        }
+    }
 }
+
