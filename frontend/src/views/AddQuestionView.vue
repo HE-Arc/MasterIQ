@@ -19,39 +19,42 @@ const clearForm = () => {
 };
 
 const submitForm = async () => {
-    if (!question.value.trim() || !correctAnswer.value.trim() || !wrongAnswer1.value.trim()
-        || !wrongAnswer2.value.trim() || !wrongAnswer3.value.trim()) {
-        validationMessage.value = 'Please fill in all fields.';
-        return;
+    validationMessage.value = '';
+    try {
+        if (!question.value.trim() || !correctAnswer.value.trim() || !wrongAnswer1.value.trim()
+            || !wrongAnswer2.value.trim() || !wrongAnswer3.value.trim()) {
+            validationMessage.value ='Please fill in all fields. ';
+        }
+
+        if (question.value.length > 250 || correctAnswer.value.length > 250 || wrongAnswer1.value.length > 250
+            || wrongAnswer2.value.length > 250 || wrongAnswer3.value.length > 250) {
+            validationMessage.value = 'Input fields cannot exceed 250 characters. ';
+        }
+
+        const options = [
+            correctAnswer.value.trim(),
+            wrongAnswer1.value.trim(),
+            wrongAnswer2.value.trim(),
+            wrongAnswer3.value.trim()
+        ];
+
+        const response = await APIClient.postNewCommunityQuestion(question.value.trim(), options);
+
+        validationMessage.value = 'Question saved successfully.';
+    } catch (error) {
+        validationMessage.value += 'Failed to save question. Please try again.';
+        console.error('Error saving question:', error.message);
     }
-
-    if (question.value.length > 250 || correctAnswer.value.length > 250 || wrongAnswer1.value.length > 250
-        || wrongAnswer2.value.length > 250 || wrongAnswer3.value.length > 250) {
-        validationMessage.value = 'Input fields cannot exceed 250 characters.';
-        return;
-    }
-
-    const options = [
-        correctAnswer.value.trim(),
-        wrongAnswer1.value.trim(),
-        wrongAnswer2.value.trim(),
-        wrongAnswer3.value.trim()
-    ];
-
-    const response = await APIClient.postNewCommunityQuestion(question.value.trim(), options);
-
-    console.log('Question saved successfully:', response);
-    validationMessage.value = 'Question saved successfully.';
-    clearForm();
+  clearForm();
 };
 </script>
+
 <template>
     <section class="add-question container form-wrapper">
         <div>
             <h1 class="title">Add your question</h1>
             <p class="info">Help us become the best quiz game ever by adding your amazing new question!</p>
         </div>
-        <p :class="{ 'success-message': validationMessage === 'Question saved successfully.' }">{{ validationMessage }}</p>
         <form @submit.prevent="submitForm" class="form-wrapper">
             <div class="box">
                 <CustomInput label="Question" v-model="question" required />
@@ -61,6 +64,8 @@ const submitForm = async () => {
                 <CustomInput label="Wrong Answer 1" v-model="wrongAnswer1" required />
                 <CustomInput label="Wrong Answer 2" v-model="wrongAnswer2" required />
                 <CustomInput label="Wrong Answer 3" v-model="wrongAnswer3" required />
+                <p class="info" :style="{ color : validationMessage === 'Question saved successfully.' ?
+                    'green' : 'red'}">{{ validationMessage }}</p>
             </div>
             <div class="button-wrapper">
                 <button type="submit" class="btn">Submit</button>
@@ -81,16 +86,11 @@ const submitForm = async () => {
     text-align: center;
 }
 
-.success-message {
-    color: green;
-}
-
 @media (min-width: 576px) {
     .form-wrapper {
         max-width: 90%;
     }
 }
-
 
 @media (min-width: 1024px) {
     .form-wrapper {
