@@ -33,6 +33,12 @@ const router = createRouter({
       path: '/register',
       name: 'Register',
       component: () => import('../views/Authentication/RegisterView.vue')
+    },
+    // path for unknown urls
+    {
+      path: '/:pathMatch(.*)',
+      name: 'NotFound',
+      component: () => import('../views/NotFoundView.vue')
     }
   ]
 })
