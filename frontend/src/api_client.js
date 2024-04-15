@@ -181,4 +181,19 @@ export default
             throw new Error('Error logging in: ' + error.message);
         }
     }
+
+    /**
+     * Check if the user is currently logged in
+     * @returns {Object} { isLoggedIn: Boolean }
+     */
+    static async checkUserLoggedIn() {
+        try {
+            // TODO adapt code with the actual way to know if user is logged in
+            // const response = await axios.get('/api/user/check_logged_in/');
+            // return { isLoggedIn: response.data.isLoggedIn };
+            return { isLoggedIn: false };
+        } catch (error) {
+            throw new Error('Error checking user login status: ' + error.message);
+        }
+    }
 }

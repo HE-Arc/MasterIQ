@@ -1,5 +1,20 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue';
+import APIClient from '@/api_client.js';
+
+const isLoggedIn = ref(false);
+
+const checkLoggedIn = async () => {
+    try {
+        const response = await APIClient.checkUserLoggedIn();
+        isLoggedIn.value = response.isLoggedIn;
+    } catch (error) {
+        console.error('Error checking user login status:', error);
+    }
+};
+
+checkLoggedIn();
 </script>
 
 <template>
@@ -8,14 +23,53 @@ import { RouterLink } from 'vue-router'
       <RouterLink id="main-title" to="/">MasterIQ</RouterLink>
       <nav>
         <RouterLink to="/">Categories</RouterLink>
-        <RouterLink to="/add-question">Add question</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/logout">Logout</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
+        <RouterLink v-if="!isLoggedIn" to="/register">Register</RouterLink>
+        <RouterLink v-if="isLoggedIn" to="/add-question">Add question</RouterLink>
+        <RouterLink v-if="isLoggedIn" to="/logout">Logout</RouterLink>
       </nav>
     </div>
   </header>
 </template>
+
+<script>
+import { onUnmounted } from 'vue';
+
+export default {
+    setup() {
+        const isLoggedIn = ref(false);
+
+        const checkLoggedIn = async () => {
+            try {
+                const response = await APIClient.checkUserLoggedIn();
+                isLoggedIn.value = response.isLoggedIn;
+            } catch (error) {
+                console.error('Error checking user login status:', error);
+            }
+        };
+
+        const handleLogout = async () => {
+            try {
+                await APIClient.logoutUser();
+                isLoggedIn.value = false;
+            } catch (error) {
+                console.error('Error logging out:', error);
+            }
+        };
+
+        checkLoggedIn();
+
+        onUnmounted(() => {
+            // Clean-up actions if needed
+        });
+
+        return {
+            isLoggedIn,
+            handleLogout
+        };
+    }
+};
+</script>
 
 <style scoped style="scss">
 header {
@@ -23,8 +77,7 @@ header {
   line-height: 1.5;
 }
 
-.wrapper
-{
+.wrapper {
   display: flex;
   flex-direction: column;
   padding: 1.3rem 0;
@@ -62,8 +115,7 @@ nav {
 }
 
 @media (min-width: 1024px) {
-  #main-title
-  {
+  #main-title {
     margin-bottom: 0;
   }
   .wrapper {
@@ -73,13 +125,11 @@ nav {
     padding: 1rem;
   }
   header {
-    nav
-    {
+    nav {
       margin-top: 0;
       padding: 0;
       text-align: right;
-      a
-      {
+      a {
         font-size: .9rem;
       }
     }
