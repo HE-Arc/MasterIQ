@@ -31,31 +31,20 @@ const submitForm = async () => {
         return;
     }
 
-    try {
-        const options = [
-            correctAnswer.value.trim(),
-            wrongAnswer1.value.trim(),
-            wrongAnswer2.value.trim(),
-            wrongAnswer3.value.trim()
-        ];
+    const options = [
+        correctAnswer.value.trim(),
+        wrongAnswer1.value.trim(),
+        wrongAnswer2.value.trim(),
+        wrongAnswer3.value.trim()
+    ];
 
-        const response = await APIClient.postNewCommunityQuestion(question.value.trim(), options);
+    const response = await APIClient.postNewCommunityQuestion(question.value.trim(), options);
 
-        console.log('Question saved successfully:', response);
-        validationMessage.value = 'Question saved successfully.';
-        clearForm();
-    } catch (error) {
-        console.error('Error saving question:', error);
-
-        if (error instanceof ValidationError) {
-            validationMessage.value = error.message; // Show detailed validation error message to user
-        } else {
-            validationMessage.value = 'Error saving question. Please try again later.';
-        }
-    }
+    console.log('Question saved successfully:', response);
+    validationMessage.value = 'Question saved successfully.';
+    clearForm();
 };
 </script>
-
 <template>
     <section class="add-question container form-wrapper">
         <div>
@@ -85,6 +74,7 @@ const submitForm = async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 80vh;
 }
 
 .title, .info {
