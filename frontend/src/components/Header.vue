@@ -1,13 +1,14 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import IconLogo from '@/components/icons/IconLogo.vue'
 </script>
 
 <template>
   <header>
     <div class="wrapper">
-      <RouterLink id="main-title" to="/">MasterIQ</RouterLink>
+      <RouterLink id="main-title" to="/"><IconLogo class="header-logo"/></RouterLink>
       <nav>
-        <RouterLink to="/">Categories</RouterLink>
+        <RouterLink to="/categories">Categories</RouterLink>
         <RouterLink to="/add-question">Add question</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
         <RouterLink to="/logout">Logout</RouterLink>
@@ -21,6 +22,11 @@ import { RouterLink } from 'vue-router'
 header {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
   line-height: 1.5;
+}
+
+.header-logo {
+  width: 50px;
+  height: 50px;
 }
 
 .wrapper
@@ -64,7 +70,8 @@ nav {
 @media (min-width: 1024px) {
   #main-title
   {
-    margin-bottom: 0;
+    margin-bottom: 0;    
+    line-height: 0;
   }
   .wrapper {
     flex-direction: row;
