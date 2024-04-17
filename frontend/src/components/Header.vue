@@ -15,12 +15,13 @@ const checkLoggedIn = async () => {
 };
 
 checkLoggedIn();
+import IconLogo from '@/components/icons/IconLogo.vue'
 </script>
 
 <template>
   <header>
     <div class="wrapper">
-      <RouterLink id="main-title" to="/">MasterIQ</RouterLink>
+      <RouterLink id="main-title" to="/"><IconLogo class="header-logo"/></RouterLink>
       <nav>
         <RouterLink to="/">Categories</RouterLink>
         <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
@@ -77,6 +78,10 @@ header {
   line-height: 1.5;
 }
 
+.header-logo {
+  width: 50px;
+  height: 50px;
+}
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -115,8 +120,10 @@ nav {
 }
 
 @media (min-width: 1024px) {
-  #main-title {
-    margin-bottom: 0;
+  #main-title
+  {
+    margin-bottom: 0;    
+    line-height: 0;
   }
   .wrapper {
     flex-direction: row;

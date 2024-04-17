@@ -150,7 +150,7 @@ export default
      * Register a new user
      * @param {String} username The username of the new user
      * @param {String} password The password of the new user
-     * @returns {Object} The response data from the API
+     * @returns {Object} {"message": String}
      */
     static async registerUser(username, password) {
         try {
@@ -168,7 +168,7 @@ export default
      * Log in an existing user
      * @param {String} username The username of the user
      * @param {String} password The password of the user
-     * @returns {Object} The response data from the API
+     * @returns {Object} {"message": String}
      */
     static async loginUser(username, password) {
         try {
@@ -196,4 +196,21 @@ export default
             throw new Error('Error checking user login status: ' + error.message);
         }
     }
+
+
+     /** Post a new community question to the API.
+     * @param {String} question - The text of the new question.
+     * @param {Array<String>} options - An array of options for the question.
+     * @returns {Object} {"text": String, "category": String }
+     */
+    static async postNewCommunityQuestion(question, options) {
+        const response = await axios.post(`/api/question/new_community/`, {
+            question,
+            options,
+            answer: '0'
+        });
+
+        return response.data;
+    }
 }
+

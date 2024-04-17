@@ -6,8 +6,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Categories',
+      name: 'Home',
       component: HomeView
+    },
+    {
+      path: '/categories',
+      name: 'Categories',
+      component: () => import('../views/CategoriesView.vue')
     },
     {
       path: '/quiz/:id_category',
@@ -33,6 +38,12 @@ const router = createRouter({
       path: '/register',
       name: 'Register',
       component: () => import('../views/Authentication/RegisterView.vue')
+    },
+    // path for unknown urls
+    {
+      path: '/:pathMatch(.*)',
+      name: 'NotFound',
+      component: () => import('../views/NotFoundView.vue')
     }
   ]
 })
