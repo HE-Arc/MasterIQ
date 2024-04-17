@@ -20,7 +20,8 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-const csrftoken = getCookie('csrftoken');
+
+let csrftoken = getCookie('csrftoken');
 axios.defaults.headers.post['X-CSRFToken'] = csrftoken;
 export default
     class APIClient {
@@ -145,6 +146,7 @@ export default
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
     static async postAnswerText(answer_text) {
+        csrftoken = getCookie('csrftoken');
         const response = await axios.post(`/api/question/answer_text/`, {
             answer: answer_text,
         });
@@ -157,6 +159,7 @@ export default
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
     static async postAnswerOption(option_id) {
+        csrftoken = getCookie('csrftoken');
         const response = await axios.post(`/api/question/answer_option/`, {
             answer: option_id,
         });
@@ -170,6 +173,7 @@ export default
      * @returns {Object} {"message": String}
      */
     static async registerUser(username, password) {
+        csrftoken = getCookie('csrftoken');
         try {
             const response = await axios.post('/api/user/register/', {
                 username,
@@ -188,6 +192,7 @@ export default
      * @returns {Object} {"message": String}
      */
     static async loginUser(username, password) {
+        csrftoken = getCookie('csrftoken');
         try {
             const response = await axios.post('/api/user/login/', {
                 username,
@@ -206,6 +211,7 @@ export default
      * @returns {Object} {"text": String, "category": String }
      */
     static async postNewCommunityQuestion(question, options) {
+        csrftoken = getCookie('csrftoken');
         const
         response = await axios.post(`/api/question/new_community/`, {
             question,
@@ -220,6 +226,7 @@ export default
      * @returns {Object} The response data from the API
      */
     static async logOutUser() {
+        csrftoken = getCookie('csrftoken');
         try {
             const response = await axios.post('/api/user/logout/',);
             return response.data;
