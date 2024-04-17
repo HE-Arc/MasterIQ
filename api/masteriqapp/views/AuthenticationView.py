@@ -9,9 +9,11 @@ import masteriqapp.models.IQ
 
 masteriq = apps.get_app_config("masteriqapp")
 
+
 class AuthenticationView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
     iq_model = masteriq.get_model("IQ")
+
     @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
     def login(self, request):
         username = request.data.get('username')
@@ -47,4 +49,3 @@ class AuthenticationView(viewsets.ViewSet):
                 already_existing_entry = self.iq_model.objects.get_iq_of_user_in_category(user=user, category=category)
             except masteriqapp.models.IQ.DoesNotExist:
                 self.iq_model.objects.create(user=user, category=category, iq=100)
-
