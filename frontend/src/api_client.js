@@ -5,24 +5,6 @@ const API_SERVER = import.meta.env.VITE_API_SERVER;
 axios.defaults.baseURL = API_SERVER;
 axios.defaults.withCredentials = true;
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-let csrftoken = getCookie('csrftoken');
-axios.defaults.headers.post['X-CSRFToken'] = csrftoken;
 export default
     class APIClient {
     /**
@@ -31,7 +13,13 @@ export default
      * @returns {Array} {category_id: {category_name: String, user_iq: Number}}
      */
     static async getCategories() {
-        const response = await axios.get(`/api/category/iq/`);
+        //TODO: use logged in user's token here, this is simply an example
+        let config = {
+            headers: {
+                Authorization: "Token 3cd0733f6dda54b17f59b4c952871a127f6d586d"
+            }
+        }
+        const response = await axios.get(`/api/category/iq/`, config);
         return response.data;
     }
 
@@ -88,9 +76,12 @@ export default
             }
             return btoa(binary);
         }
-
         const response = await axios.get(`/api/category/${category_id}/image/`,
             {
+                //TODO: use logged in user's token here, this is simply an example
+                headers: {
+                    Authorization: "Token 3cd0733f6dda54b17f59b4c952871a127f6d586d"
+                },
                 responseType: 'arraybuffer'
             });
         return 'data:image/jpeg;base64,' + arrayBufferToBase64(response.data);
@@ -146,7 +137,6 @@ export default
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
     static async postAnswerText(answer_text) {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post(`/api/question/answer_text/`, {
             answer: answer_text,
         });
@@ -159,7 +149,6 @@ export default
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
     static async postAnswerOption(option_id) {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post(`/api/question/answer_option/`, {
             answer: option_id,
         });
@@ -173,7 +162,6 @@ export default
      * @returns {Object} {"message": String}
      */
     static async registerUser(username, password) {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post('/api/user/register/', {
             username,
             password
@@ -188,7 +176,6 @@ export default
      * @returns {Object} {"message": String}
      */
     static async loginUser(username, password) {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post('/api/user/login/', {
             username,
             password
@@ -203,7 +190,6 @@ export default
      * @returns {Object} {"text": String, "category": String }
      */
     static async postNewCommunityQuestion(question, options) {
-        csrftoken = getCookie('csrftoken');
         const
         response = await axios.post(`/api/question/new_community/`, {
             question,
@@ -218,7 +204,6 @@ export default
      * @returns {Object} The response data from the API
      */
     static async logOutUser() {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post('/api/user/logout/',);
         return response.data;
     }
