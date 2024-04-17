@@ -158,7 +158,7 @@ export default
      */
     static async postAnswerOption(option_id) {
         const response = await axios.post(`/api/question/answer_option/`, {
-            "answer": option_id,
+            answer: option_id,
         });
         return response.data;
     }
@@ -215,6 +215,10 @@ export default
         return  response.data;
     }
 
+    /**
+     * Log out an existing user
+     * @returns {Object} The response data from the API
+     */
     static async logOutUser() {
         try {
             const response = await axios.post('/api/user/logout/',);
