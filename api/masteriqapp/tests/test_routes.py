@@ -5,6 +5,10 @@ import django.apps
 class RouteTestCases(TestCase):
     def test_route(self):
         c = Client()
+
+        response = c.post("/api/user/signup/", {"username":"test", "password":"test"})
+        assert response.status_code == 201
+
         response = c.get("/api/category/1/image/")
         assert response.status_code == 200
 

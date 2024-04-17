@@ -4,7 +4,7 @@ from masteriqapp.models.Category import Category
 
 class IQManager(models.Manager):
     def get_best_players_of_category(self, category, nb_players=10):
-        return self.filter(category=category).order_by('iq')[:nb_players]
+        return self.filter(category=category).order_by('-iq')[:nb_players]
 
     def get_all_iq_of_user(self, user):
         return self.filter(user=user).values("iq", "category")

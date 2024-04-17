@@ -30,10 +30,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(strtobool(os.getenv('DEBUG')))
 
 ALLOWED_HOSTS = [
-    os.getenv('BACKEND_HOST')
+    os.getenv('BACKEND_HOST'),
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    os.getenv('FRONTEND_URL'),
+    os.getenv('BACKEND_URL'),
+]
+
+CSRF_TRUSTED_ORIGINS = [
     os.getenv('FRONTEND_URL'),
     os.getenv('BACKEND_URL'),
 ]
@@ -49,9 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'masteriqapp',
     'rest_framework',
-    "corsheaders",
+
 ]
 
 MIDDLEWARE = [
@@ -155,5 +161,11 @@ INIT_DATA_FOLDER = os.path.join('data', 'csv')
 IMAGES_FOLDER = os.path.join('data', 'images')
 DEFAULT_IMAGE = "default.jpeg"
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 
+AUTH_USER_MODEL='masteriqapp.CustomUser'
 # end of file

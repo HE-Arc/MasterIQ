@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from django.apps import apps
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from masteriqapp.serializers.OptionSerializer import OptionSerializer
@@ -39,10 +40,15 @@ def check_if_text_answer_is_correct(given_answer, right_answer):
 
 
 class QuestionView(viewsets.ViewSet):
+    WRONG_PENALTY = 5
+    TEXT_RIGHT_POINTS = 5
+    OPTIONS_RIGHT_POINTS = 3
     category_model = masteriq.get_model("Category")
     question_model = masteriq.get_model("Question")
     option_model = masteriq.get_model("Option")
+    iq_model = masteriq.get_model("IQ")
     queryset = category_model.objects.all()
+    permission_classes = (IsAuthenticated,)
 
     @action(detail=True, methods=["GET"])
     def new(self, request, pk):
@@ -120,11 +126,17 @@ class QuestionView(viewsets.ViewSet):
         question = self.question_model.objects.get(pk=request.session['question'])
         right_answer = question.options.get(is_correct=True)
         user_is_correct = check_if_text_answer_is_correct(request.data['answer'], right_answer.text)
+        iq = self.iq_model.objects.get(user=request.user, category=question.category)
+        if request.data['answer'].lower() == right_answer.text.lower():
+            user_is_correct = True
+            iq.iq += self.TEXT_RIGHT_POINTS
+        else:
+            iq.iq -= self.WRONG_PENALTY
+        iq.save()
         data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
                         "answer_sent": request.data['answer']}
         del request.session['question']
         del request.session['options_asked']
-        # TODO: add points to user when connexion is implemented
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
     @action(detail=False, methods=["POST"], url_path="answer_option")
@@ -141,13 +153,18 @@ class QuestionView(viewsets.ViewSet):
         right_answer = question.options.get(is_correct=True)
         answer_sent = self.option_model.objects.get(pk=request.data['answer'])
         user_is_correct = False
+        iq = self.iq_model.objects.get(user=request.user, category=question.category)
         if answer_sent.id == right_answer.id:
             user_is_correct = True
+            iq.iq += self.OPTIONS_RIGHT_POINTS
+        else:
+            iq.iq -= self.WRONG_PENALTY
+        iq.save()
+
         data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
                         "answer_sent": answer_sent.text}
         del request.session['question']
         del request.session['options_asked']
-        # TODO: add points to user when connexion is implemented
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
     @action(detail=False, methods=["GET"])
