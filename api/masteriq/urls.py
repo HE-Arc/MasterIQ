@@ -19,17 +19,20 @@ from django.urls import path
 from django.urls.conf import include
 from rest_framework.routers import DefaultRouter
 
-from masteriqapp import views
+from masteriqapp import views as masteriq_views
+from rest_framework.authtoken import views
+
 
 router = DefaultRouter()
 
-router.register("category", views.IQView, basename="category")
-router.register("question", views.QuestionView, basename="question")
-router.register("rank", views.RankView, basename="rank")
-router.register("user", views.AuthenticationView, basename="user")
+router.register("category", masteriq_views.IQView, basename="category")
+router.register("question", masteriq_views.QuestionView, basename="question")
+router.register("rank", masteriq_views.RankView, basename="rank")
+router.register("user", masteriq_views.AuthenticationView, basename="user")
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include(router.urls)),
+    path("api-token-auth/", views.obtain_auth_token)
 ]
