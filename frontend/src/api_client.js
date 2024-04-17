@@ -174,15 +174,11 @@ export default
      */
     static async registerUser(username, password) {
         csrftoken = getCookie('csrftoken');
-        try {
-            const response = await axios.post('/api/user/register/', {
-                username,
-                password
-            });
-            return response.data;
-        } catch (error) {
-            throw new Error('Error registering user: ' + error.message);
-        }
+        const response = await axios.post('/api/user/register/', {
+            username,
+            password
+        });
+        return response.data;
     }
 
     /**
@@ -193,15 +189,11 @@ export default
      */
     static async loginUser(username, password) {
         csrftoken = getCookie('csrftoken');
-        try {
-            const response = await axios.post('/api/user/login/', {
-                username,
-                password
-            });
-            return response.data;
-        } catch (error) {
-            throw new Error('Error logging in: ' + error.message);
-        }
+        const response = await axios.post('/api/user/login/', {
+            username,
+            password
+        });
+        return response.data;
     }
 
     /**
@@ -227,12 +219,8 @@ export default
      */
     static async logOutUser() {
         csrftoken = getCookie('csrftoken');
-        try {
-            const response = await axios.post('/api/user/logout/',);
-            return response.data;
-        } catch (error) {
-            throw new Error('Error logging out: ' + error.message);
-        }
+        const response = await axios.post('/api/user/logout/',);
+        return response.data;
     }
 }
 

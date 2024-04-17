@@ -50,7 +50,7 @@ class QuestionView(viewsets.ViewSet):
     queryset = category_model.objects.all()
     permission_classes = (IsAuthenticated,)
 
-    @action(detail=True, methods=["GET"])
+    @action(detail=True, methods=["GET"], permission_classes=[IsAuthenticated])
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
         if 'question' in request.session:
@@ -66,7 +66,7 @@ class QuestionView(viewsets.ViewSet):
         serializer = QuestionSerializer(new_question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=["POST"])
+    @action(detail=False, methods=["POST"], permission_classes=[IsAuthenticated])
     def new_community(self, request):
         datas = request.data
         if not ('question' in datas and 'answer' in datas and 'options' in datas):
@@ -102,7 +102,7 @@ class QuestionView(viewsets.ViewSet):
 
         return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=False, methods=["GET"])
+    @action(detail=False, methods=["GET"], permission_classes=[IsAuthenticated])
     def options(self, request):
         if not 'question' in request.session:
             return Response(status=449, data={"error": "No question being answered at the moment"})
@@ -114,7 +114,7 @@ class QuestionView(viewsets.ViewSet):
             data_to_send['options'][option.id] = option.text
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
-    @action(detail=False, methods=["POST"], url_path="answer_text")
+    @action(detail=False, methods=["POST"], url_path="answer_text", permission_classes=[IsAuthenticated])
     def answer_text(self, request):
         if not 'answer' in request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
@@ -139,7 +139,7 @@ class QuestionView(viewsets.ViewSet):
         del request.session['options_asked']
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
-    @action(detail=False, methods=["POST"], url_path="answer_option")
+    @action(detail=False, methods=["POST"], url_path="answer_option", permission_classes=[IsAuthenticated])
     def answer_options(self, request):
         if not 'answer' in request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
@@ -167,7 +167,7 @@ class QuestionView(viewsets.ViewSet):
         del request.session['options_asked']
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
-    @action(detail=False, methods=["GET"])
+    @action(detail=False, methods=["GET"], permission_classes=[IsAuthenticated])
     def options_asked(self, request):
         if not 'question' in request.session or not 'options_asked' in request.session:
             data_to_send = {"options_asked": False}
