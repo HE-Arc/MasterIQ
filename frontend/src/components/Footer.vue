@@ -9,10 +9,10 @@
 
 <style scoped style="scss">
 footer {
-    min-height: 5rem;
-    background-image: url('/background.jpg');
-    background-size: cover; 
+    height: 5rem;
     margin-top: 1rem;
+    background-image: url('/background.jpg');
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -50,7 +50,7 @@ const submitForm = async () => {
 </script>
 
 <template>
-    <section class="add-question container form-wrapper">
+    <section class="center container form-wrapper">
         <div>
             <h1 class="title">Add your question</h1>
             <p class="info">Help us become the best quiz game ever by adding your amazing new question!</p>
@@ -75,28 +75,8 @@ const submitForm = async () => {
 </template>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 80vh;
-}
-
 .title, .info {
     text-align: center;
 }
-
-@media (min-width: 576px) {
-    .form-wrapper {
-        max-width: 90%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .form-wrapper {
-        max-width: 70%;
-    }
-}
-
 </style>
 

@@ -38,7 +38,7 @@ const login = async () => {
 
 <template>
     <div>
-        <section class="login-form container">
+        <section class="center container">
             <div>
               <h1 class="title">Login</h1>
               <p class="info">Log in here</p>
@@ -58,30 +58,11 @@ const login = async () => {
 </template>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 80vh;
-}
-
 .title, .info {
     text-align: center;
 }
 
 .success-message {
     color: green;
-}
-
-@media (min-width: 576px) {
-    .form-wrapper {
-        max-width: 90%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .form-wrapper {
-        max-width: 70%;
-    }
 }
 </style>
