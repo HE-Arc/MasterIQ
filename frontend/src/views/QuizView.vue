@@ -21,7 +21,7 @@ const fetchNewQuestion = async () => {
     // wait for the question before checking if the user has asked for options
     hasAskedOptions.value = await APIClient.getIfOptionsAsked();
 }
-// Fetch user IQ and add it to the graph 
+// Fetch user IQ and add it to the graph
 const graphComponent = ref(null);
 const fetchUserIQ = async () => {
     const userIq = await APIClient.getUserIQ(id_category);
@@ -36,9 +36,10 @@ onMounted(() => {
 </script>
 
 <template>
+    <section class="container">
+      <p class="info">Answer correctly to the question and earn as many IQs as possible!</p>
+    </section>
     <section class="quiz container col-wrapper">
-        <p class="info">Answer correctly to the question and earn as many IQs as possible!</p>
-        <div class="empty-space"></div>
         <div>
             <h1 class="title">Question</h1>
             <p class="question box">{{ question }}</p>
@@ -50,11 +51,13 @@ onMounted(() => {
             <GraphSection ref="graphComponent" />
             <LeaderBoard :id_category="Number(id_category)" />
         </div>
-
     </section>
 </template>
 
 <style scoped>
+.container{
+  max-width: 1200px;
+}
 .title {
     text-align: center;
 }
@@ -71,8 +74,8 @@ onMounted(() => {
 @media (min-width: 1024px) {
     .col-wrapper {
         display: grid;
-        grid-template-columns: .66fr .33fr;
-        column-gap: 2rem;
+        grid-template-columns: 5fr 1fr;
+        column-gap: 3rem;
     }
 
     .category-banner {
