@@ -54,7 +54,7 @@ class QuestionView(viewsets.ViewSet):
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
         if 'question' in request.session:
-            actual_question = self.question_model.objects.get(pk=request.session['question'])
+            actual_question = get_object_or_404(self.question_model.objects.all(), pk=request.session['question'])
             if actual_question.category == category:
                 serializer = QuestionSerializer(actual_question)
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -84,7 +84,7 @@ class QuestionView(viewsets.ViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         for option in datas['options']:
-            option_serializer = OptionSerializer(data={"text": option, "is_correct": False, "question": 3})
+            option_serializer = OptionSerializer(data={"text": option, "is_correct": False, "question":  question.id})
 
             if option_serializer.is_valid():
                 option_serializer.save()
