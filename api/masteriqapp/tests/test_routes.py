@@ -6,7 +6,8 @@ class RouteTestCases(TestCase):
     def test_route(self):
         c = Client()
 
-        response = c.post("/api/user/signup/", {"username":"test", "password":"test"})
+        response = c.post("/api/user/register/", {"username":"test", "password":"test"})
+        print(response.status_code)
         assert response.status_code == 201
 
         response = c.get("/api/category/1/image/")
