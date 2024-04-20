@@ -12,16 +12,25 @@ const router = createRouter({
     {
       path: '/categories',
       name: 'Categories',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/CategoriesView.vue')
     },
     {
       path: '/quiz/:id_category',
       name: 'Quiz',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/QuizView.vue')
     },
     {
       path: '/add-question',
       name: 'Add question',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/AddQuestionView.vue')
     },
     {

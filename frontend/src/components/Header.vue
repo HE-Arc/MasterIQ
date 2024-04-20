@@ -1,6 +1,11 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import IconLogo from '@/components/icons/IconLogo.vue'
+
+const props = defineProps({
+  isConnected: Boolean
+})
+
 </script>
 
 <template>
@@ -8,11 +13,11 @@ import IconLogo from '@/components/icons/IconLogo.vue'
     <div class="wrapper">
       <RouterLink id="main-title" to="/"><IconLogo class="header-logo"/></RouterLink>
       <nav>
-        <RouterLink to="/categories">Categories</RouterLink>
-        <RouterLink to="/add-question">Add question</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/logout">Logout</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/categories" v-show="isConnected">Categories</RouterLink>
+        <RouterLink to="/add-question" v-show="isConnected">Add question</RouterLink>
+        <RouterLink to="/login" v-show="!isConnected">Login</RouterLink>
+        <RouterLink to="/logout" v-show="isConnected">Logout</RouterLink>
+        <RouterLink to="/register" v-show="!isConnected">Register</RouterLink>
       </nav>
     </div>
   </header>
