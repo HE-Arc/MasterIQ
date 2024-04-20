@@ -2,10 +2,12 @@
 import CustomInput from '@/components/CustomInput.vue';
 import { ref } from 'vue';
 import APIClient from '@/api_client.js';
+import router from '@/router';
 
 const username = ref('');
 const password = ref('');
 const validationMessage = ref('');
+const loginSuccess = ref(false);
 
 const clearForm = () => {
     username.value = '';
@@ -19,19 +21,20 @@ const login = async () => {
     }
 
     try {
-        const response = await APIClient.loginUser(username.value.trim(), password.value.trim());
-        console.log('Login successful:', response);
-        validationMessage.value = 'Login successful.';
-        clearForm();
+        await APIClient.loginUser(username.value.trim(), password.value.trim());
 
-        // Redirect or perform additional actions after successful login
-    } catch (error) {
-        console.error('Error logging in:', error);
-        if (error instanceof ValidationError) {
-            validationMessage.value = error.message; // Show detailed validation error message to user
-        } else {
-            validationMessage.value = 'Error logging in. Please try again.';
-        }
+        loginSuccess.value = true;
+        validationMessage.value = 'Login successful! Redirecting...';
+        clearForm();
+        setTimeout(() => {
+            validationMessage.value = '';
+            router.push('/categories');
+        }, 1000);
+    }
+    catch (error) {
+        loginSuccess.value = false;
+        validationMessage.value = 'Invalid username or password. Please try again.';
+        password.value = '';
     }
 };
 </script>
@@ -40,14 +43,14 @@ const login = async () => {
     <div>
         <section class="login-form container">
             <div>
-              <h1 class="title">Login</h1>
-              <p class="info">Log in here</p>
+                <h1 class="title">Login</h1>
+                <p class="info">Log in here</p>
             </div>
-            <p :class="{ 'success-message': validationMessage === 'Login successful.' }">{{ validationMessage }}</p>
-            <form @submit.prevent="login" @keyup.enter="login" class="form-wrapper">
+            <p class="form-message" :class="{ 'success-message': loginSuccess }">{{ validationMessage }}</p>
+            <form @submit.prevent="login" class="form-wrapper">
                 <div class="box">
-                  <CustomInput label="Username" v-model="username" required />
-                  <CustomInput label="Password" v-model="password" type="password" required/>
+                    <CustomInput label="Username" v-model="username" required />
+                    <CustomInput label="Password" v-model="password" type="password" required />
                 </div>
                 <div class="button-wrapper">
                     <button type="submit" class="btn">Login</button>
@@ -65,8 +68,13 @@ const login = async () => {
     min-height: 80vh;
 }
 
-.title, .info {
+.title,
+.info {
     text-align: center;
+}
+
+.form-message {
+    color: red;
 }
 
 .success-message {

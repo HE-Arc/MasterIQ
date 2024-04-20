@@ -5,6 +5,18 @@ const API_SERVER = import.meta.env.VITE_API_SERVER;
 axios.defaults.baseURL = API_SERVER;
 axios.defaults.withCredentials = true;
 
+// Source code: https://stackoverflow.com/a/15724300
+export function getTokenFromCookie() {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; access_token=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+let access_token = getTokenFromCookie();
+if (access_token !== undefined) {
+    axios.defaults.headers.common['Authorization'] = access_token;
+}
+
 export default
     class APIClient {
     /**
@@ -13,13 +25,7 @@ export default
      * @returns {Array} {category_id: {category_name: String, user_iq: Number}}
      */
     static async getCategories() {
-        //TODO: use logged in user's token here, this is simply an example
-        let config = {
-            headers: {
-                Authorization: "Token 3cd0733f6dda54b17f59b4c952871a127f6d586d"
-            }
-        }
-        const response = await axios.get(`/api/category/iq/`, config);
+        const response = await axios.get(`/api/category/iq/`);
         return response.data;
     }
 
@@ -78,10 +84,6 @@ export default
         }
         const response = await axios.get(`/api/category/${category_id}/image/`,
             {
-                //TODO: use logged in user's token here, this is simply an example
-                headers: {
-                    Authorization: "Token 3cd0733f6dda54b17f59b4c952871a127f6d586d"
-                },
                 responseType: 'arraybuffer'
             });
         return 'data:image/jpeg;base64,' + arrayBufferToBase64(response.data);
@@ -159,28 +161,43 @@ export default
      * Register a new user
      * @param {String} username The username of the new user
      * @param {String} password The password of the new user
-     * @returns {Object} {"message": String}
+     * @returns {Object} Axios response type object
      */
     static async registerUser(username, password) {
-        const response = await axios.post('/api/user/register/', {
-            username,
-            password
+        let response = await axios.post('/api/user/register/', {
+            username: username,
+            password: password
         });
-        return response.data;
+
+        if (response.status === 201) {
+            // register ok, login the user
+            response = await this.loginUser(username, password);
+        }
+        return response;
     }
 
     /**
      * Log in an existing user
      * @param {String} username The username of the user
      * @param {String} password The password of the user
-     * @returns {Object} {"message": String}
+     * @returns {Object} Axios response type object
      */
     static async loginUser(username, password) {
-        const response = await axios.post('/api/user/login/', {
-            username,
-            password
+        const response = await axios.post('/api-token-auth/', {
+            username: username,
+            password: password
         });
-        return response.data;
+
+        // set the token in the axios headers
+        if (response.status === 200) {
+            // set cookie
+            document.cookie = `access_token=Token ${response.data.token};secure;expires=Thu, 18 Dec 2024 12:00:00 UTC;`; // TODO adding expires date from backend
+
+            // set axios header
+            axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
+        }
+
+        return response;
     }
 
     /**
@@ -191,21 +208,29 @@ export default
      */
     static async postNewCommunityQuestion(question, options) {
         const
-        response = await axios.post(`/api/question/new_community/`, {
-            question,
-            options,
-            answer: '0'
-        });
-        return  response.data;
+            response = await axios.post(`/api/question/new_community/`, {
+                question,
+                options,
+                answer: '0'
+            });
+        return response.data;
     }
 
     /**
      * Log out an existing user
      * @returns {Object} The response data from the API
      */
-    static async logOutUser() {
-        const response = await axios.post('/api/user/logout/',);
-        return response.data;
+    static async logoutUser() {
+        // TODO maelys: uncomment this line when the backend is ready
+        //const response = await axios.post('/api/user/logout/');
+
+        // remove cookie
+        document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure`;
+
+        // remove axios header
+        delete axios.defaults.headers.common['Authorization'];
+
+        return { message: "User logged out" };
     }
 }
 

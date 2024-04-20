@@ -2,17 +2,18 @@
 import CustomInput from '@/components/CustomInput.vue';
 import { ref } from 'vue';
 import APIClient from '@/api_client.js';
+import router from '@/router';
 
 const username = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const validationMessage = ref('');
+const registerSuccess = ref(false);
 
 const clearForm = () => {
     username.value = '';
     password.value = '';
     confirmPassword.value = '';
-    validationMessage.value = '';
 };
 
 const register = async () => {
@@ -27,13 +28,17 @@ const register = async () => {
     }
 
     try {
-        const response = await APIClient.registerUser(username.value.trim(), password.value.trim());
-        console.log('Registration successful:', response);
-        validationMessage.value = 'Registration successful.';
+        await APIClient.registerUser(username.value.trim(), password.value.trim());
+        validationMessage.value = "Registration successful! Redirecting...";
+        registerSuccess.value = true;
+        setTimeout(() => {
+            validationMessage.value = '';
+            router.push('/categories');
+        }, 1000);
         clearForm();
     } catch (error) {
-        console.error('Error registering:', error);
-        validationMessage.value = 'Error registering. Please try again.';
+        registerSuccess.value = false;
+        validationMessage.value = "Username already exists!";
     }
 };
 </script>
@@ -45,8 +50,8 @@ const register = async () => {
                 <h1 class="title">Register</h1>
                 <p class="info">Create a new account</p>
             </div>
-            <p :class="{ 'success-message': validationMessage === 'Registration successful.' }">{{ validationMessage }}</p>
-            <form @submit.prevent="register" @keyup.enter="register" class="form-wrapper">
+            <p class="form-message" :class="{ 'success-message': registerSuccess }">{{ validationMessage }}</p>
+            <form @submit.prevent="register" class="form-wrapper">
                 <div class="box">
                     <CustomInput label="Username" v-model="username" required />
                     <CustomInput label="Password" v-model="password" type="password" required />
@@ -70,6 +75,10 @@ const register = async () => {
 
 .title, .info {
     text-align: center;
+}
+
+.form-message {
+    color: red;
 }
 
 .success-message {
