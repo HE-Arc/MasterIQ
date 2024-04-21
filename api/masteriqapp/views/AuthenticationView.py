@@ -51,7 +51,7 @@ class AuthenticationView(viewsets.ViewSet, ObtainAuthToken):
                 'token': token.key,
                 'expires': expiring_date
             })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
     def create_iq_objects_for_new_user(self, user):
         categories = self.category_model.objects.all()
