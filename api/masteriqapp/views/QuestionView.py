@@ -54,12 +54,14 @@ class QuestionView(viewsets.ViewSet):
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
         if 'question' in request.session:
-            actual_question = get_object_or_404(self.question_model.objects.all(), pk=request.session['question'])
-            if actual_question.category == category:
+            actual_question = self.question_model.objects.get(self.question_model.objects.all(), pk=request.session['question'])
+            if actual_question is not None and actual_question.category == category:
                 serializer = QuestionSerializer(actual_question)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
         questions = self.question_model.objects.filter(category=category)
+        if len(questions) == 0:
+            return Response({"error":"No questions in this category"}, status=status.HTTP_404_NOT_FOUND)
         new_question = random.choice(questions)
         request.session['question'] = new_question.id
         request.session['options_asked'] = False
@@ -82,23 +84,24 @@ class QuestionView(viewsets.ViewSet):
         else:
             return Response(data={"field": "Question", "errors": question_serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
-
-        for option in datas['options']:
-            option_serializer = OptionSerializer(data={"text": option, "is_correct": False, "question":  question.id})
+        options = []
+        for i in range(len(datas['options'])):
+            if i == int(datas['answer']):
+                options.append([datas['options'][i], True])
+            else:
+                options.append([datas['options'][i], False])
+        random.shuffle(options)
+        for option in options:
+            option_serializer = OptionSerializer(data={"text": option[0], "is_correct": option[1], "question":  question.id})
 
             if option_serializer.is_valid():
                 option_serializer.save()
             else:
-                return Response(data={"field": "Option", "error": option_serializer.errors},
+                field = "Option"
+                if option[1]:
+                    field = "Answer"
+                return Response(data={"field": field, "error": option_serializer.errors},
                                 status=status.HTTP_400_BAD_REQUEST)
-
-        option_serializer = OptionSerializer(
-            data={"text": datas['answer'], "is_correct": True, "question": question.id})
-        if option_serializer.is_valid():
-            question = option_serializer.save()
-        else:
-            return Response(data={"field": "Answer", "error": option_serializer.errors},
-                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
