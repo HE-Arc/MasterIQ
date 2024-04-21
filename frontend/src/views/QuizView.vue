@@ -43,8 +43,8 @@ onMounted(() => {
 
 <template>
   <section class="container">
-    <p v-if="disclaimer" class="disclaimer">Please be aware that this category is not moderated.
-      Answers to questions provided here may be inaccurate or misleading !</p>
+    <p v-if="disclaimer" class="disclaimer">Please be aware that this category contains question added by the users, and is not moderated. <br>
+      The questions and answers provided here may be inaccurate, misleading, offensive or not adapted for younger users.</p>
     <p class="info">Answer correctly to the question and earn as many IQs as possible!</p>
   </section>
   <section class="quiz container col-wrapper">
