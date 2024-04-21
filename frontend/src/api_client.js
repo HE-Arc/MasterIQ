@@ -192,7 +192,6 @@ export default
         if (response.status === 200) {
             // set cookie
             let date = new Date(response.data.expires).toUTCString()
-            console.log(date)
             document.cookie = `access_token=Token ${response.data.token};secure;expires=${date};`; // TODO adding expires date from backend
 
             // set axios header
