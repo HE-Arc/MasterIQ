@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny
 from django.conf import settings
 
 import masteriqapp.models.IQ
+from masteriqapp.serializers.UserSerializer import UserSerializer
 
 masteriq = apps.get_app_config("masteriqapp")
 
@@ -23,18 +24,20 @@ class AuthenticationView(viewsets.ViewSet, ObtainAuthToken):
     @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
     def register(self, request):
         username = request.data.get('username')
-        password = request.data.get('password')
         if not get_user_model().objects.filter(username=username).exists():
-            user = get_user_model().objects.create_user(username=username, password=password)
-            self.create_iq_objects_for_new_user(user)
-            return Response({'message': 'Register successful'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({'message': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+            user_serializer = UserSerializer(data=request.data)
+            if user_serializer.is_valid():
+                user = user_serializer.save()
+                self.create_iq_objects_for_new_user(user)
+                return Response({'message': 'Register successful'}, status=status.HTTP_201_CREATED)
+            return Response(data=user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
     def token(self, request):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
+        print(self.serializer_class)
         if serializer.is_valid():
             token, created = Token.objects.get_or_create(user=serializer.validated_data['user'])
             if not created:
@@ -50,8 +53,8 @@ class AuthenticationView(viewsets.ViewSet, ObtainAuthToken):
             return Response({
                 'token': token.key,
                 'expires': expiring_date
-            })
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def create_iq_objects_for_new_user(self, user):
         categories = self.category_model.objects.all()
