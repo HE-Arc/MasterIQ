@@ -171,4 +171,6 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL='masteriqapp.CustomUser'
+
+TOKEN_TIME_BEFORE_EXPIRATION_HOUR = 24
 # end of file
