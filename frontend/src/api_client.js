@@ -183,7 +183,7 @@ export default
      * @returns {Object} Axios response type object
      */
     static async loginUser(username, password) {
-        const response = await axios.post('/api-token-auth/', {
+        const response = await axios.post('/api/user/token/', {
             username: username,
             password: password
         });
@@ -191,7 +191,9 @@ export default
         // set the token in the axios headers
         if (response.status === 200) {
             // set cookie
-            document.cookie = `access_token=Token ${response.data.token};secure;expires=Thu, 18 Dec 2024 12:00:00 UTC;`; // TODO adding expires date from backend
+            let date = new Date(response.data.expires).toUTCString()
+            console.log(date)
+            document.cookie = `access_token=Token ${response.data.token};secure;expires=${date};`; // TODO adding expires date from backend
 
             // set axios header
             axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
