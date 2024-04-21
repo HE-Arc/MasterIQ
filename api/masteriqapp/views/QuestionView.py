@@ -54,12 +54,14 @@ class QuestionView(viewsets.ViewSet):
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
         if 'question' in request.session:
-            actual_question = get_object_or_404(self.question_model.objects.all(), pk=request.session['question'])
-            if actual_question.category == category:
+            actual_question = self.question_model.objects.get(self.question_model.objects.all(), pk=request.session['question'])
+            if actual_question is not None and actual_question.category == category:
                 serializer = QuestionSerializer(actual_question)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
         questions = self.question_model.objects.filter(category=category)
+        if len(questions) == 0:
+            return Response({"error":"No questions in this category"}, status=status.HTTP_404_NOT_FOUND)
         new_question = random.choice(questions)
         request.session['question'] = new_question.id
         request.session['options_asked'] = False
