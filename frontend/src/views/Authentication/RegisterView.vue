@@ -45,7 +45,7 @@ const register = async () => {
 
 <template>
     <div>
-        <section class="Register-form container">
+        <section class="center container">
             <div>
                 <h1 class="title">Register</h1>
                 <p class="info">Create a new account</p>
@@ -66,12 +66,6 @@ const register = async () => {
 </template>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 80vh;
-}
 
 .title, .info {
     text-align: center;
@@ -83,17 +77,5 @@ const register = async () => {
 
 .success-message {
     color: green;
-}
-
-@media (min-width: 576px) {
-    .form-wrapper {
-        max-width: 90%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .form-wrapper {
-        max-width: 70%;
-    }
 }
 </style>

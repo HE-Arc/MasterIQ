@@ -34,8 +34,7 @@ header {
   height: 50px;
 }
 
-.wrapper
-{
+.wrapper {
   display: flex;
   flex-direction: column;
   padding: 1.3rem 0;
@@ -72,15 +71,15 @@ nav {
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 481px) {
   #main-title
   {
-    margin-bottom: 0;    
+    margin-bottom: 0;
     line-height: 0;
   }
   .wrapper {
     flex-direction: row;
-    max-width: 1100px;
+    max-width: 90vw;
     margin: 0 auto;
     padding: 1rem;
   }
@@ -96,7 +95,6 @@ nav {
       }
     }
   }
-
   .logo {
     margin: 0 2rem 0 0;
   }
