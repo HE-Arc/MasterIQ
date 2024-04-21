@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'masteriqapp',
     'rest_framework',
-
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -164,8 +164,13 @@ DEFAULT_IMAGE = "default.jpeg"
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
 }
 
 AUTH_USER_MODEL='masteriqapp.CustomUser'
+
+TOKEN_TIME_BEFORE_EXPIRATION_HOUR = 24
 # end of file

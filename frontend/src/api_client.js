@@ -5,24 +5,18 @@ const API_SERVER = import.meta.env.VITE_API_SERVER;
 axios.defaults.baseURL = API_SERVER;
 axios.defaults.withCredentials = true;
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+// Source code: https://stackoverflow.com/a/15724300
+export function getTokenFromCookie() {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; access_token=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-let csrftoken = getCookie('csrftoken');
-axios.defaults.headers.post['X-CSRFToken'] = csrftoken;
+let access_token = getTokenFromCookie();
+if (access_token !== undefined) {
+    axios.defaults.headers.common['Authorization'] = access_token;
+}
+
 export default
     class APIClient {
     /**
@@ -88,7 +82,6 @@ export default
             }
             return btoa(binary);
         }
-
         const response = await axios.get(`/api/category/${category_id}/image/`,
             {
                 responseType: 'arraybuffer'
@@ -146,7 +139,6 @@ export default
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
     static async postAnswerText(answer_text) {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post(`/api/question/answer_text/`, {
             answer: answer_text,
         });
@@ -159,7 +151,6 @@ export default
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
     static async postAnswerOption(option_id) {
-        csrftoken = getCookie('csrftoken');
         const response = await axios.post(`/api/question/answer_option/`, {
             answer: option_id,
         });
@@ -170,30 +161,45 @@ export default
      * Register a new user
      * @param {String} username The username of the new user
      * @param {String} password The password of the new user
-     * @returns {Object} {"message": String}
+     * @returns {Object} Axios response type object
      */
     static async registerUser(username, password) {
-        csrftoken = getCookie('csrftoken');
-        const response = await axios.post('/api/user/register/', {
-            username,
-            password
+        let response = await axios.post('/api/user/register/', {
+            username: username,
+            password: password
         });
-        return response.data;
+
+        if (response.status === 201) {
+            // register ok, login the user
+            response = await this.loginUser(username, password);
+        }
+        return response;
     }
 
     /**
      * Log in an existing user
      * @param {String} username The username of the user
      * @param {String} password The password of the user
-     * @returns {Object} {"message": String}
+     * @returns {Object} Axios response type object
      */
     static async loginUser(username, password) {
-        csrftoken = getCookie('csrftoken');
-        const response = await axios.post('/api/user/login/', {
-            username,
-            password
+        const response = await axios.post('/api/user/token/', {
+            username: username,
+            password: password
         });
-        return response.data;
+
+        // set the token in the axios headers
+        if (response.status === 200) {
+            // set cookie
+            let date = new Date(response.data.expires).toUTCString()
+            console.log(date)
+            document.cookie = `access_token=Token ${response.data.token};secure;expires=${date};`; // TODO adding expires date from backend
+
+            // set axios header
+            axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
+        }
+
+        return response;
     }
 
     /**
@@ -203,24 +209,30 @@ export default
      * @returns {Object} {"text": String, "category": String }
      */
     static async postNewCommunityQuestion(question, options) {
-        csrftoken = getCookie('csrftoken');
         const
-        response = await axios.post(`/api/question/new_community/`, {
-            question,
-            options,
-            answer: '0'
-        });
-        return  response.data;
+            response = await axios.post(`/api/question/new_community/`, {
+                question,
+                options,
+                answer: '0'
+            });
+        return response.data;
     }
 
     /**
      * Log out an existing user
      * @returns {Object} The response data from the API
      */
-    static async logOutUser() {
-        csrftoken = getCookie('csrftoken');
-        const response = await axios.post('/api/user/logout/',);
-        return response.data;
+    static async logoutUser() {
+        // TODO maelys: uncomment this line when the backend is ready
+        //const response = await axios.post('/api/user/logout/');
+
+        // remove cookie
+        document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure`;
+
+        // remove axios header
+        delete axios.defaults.headers.common['Authorization'];
+
+        return { message: "User logged out" };
     }
 }
 
