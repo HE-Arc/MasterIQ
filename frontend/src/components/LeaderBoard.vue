@@ -44,12 +44,12 @@ onMounted(async () => {
                 <tr v-for="(user, key) in leaderboard" :key="user.id">
                     <td>{{ key + 1 }}</td>
                     <td>{{ user.user_name }}</td>
-                    <td>{{ user.user_iq }}</td>
+                    <td>{{ user.user_iq.toFixed(0)}}</td>
                 </tr>
                 <tr v-if="user_rank" class="player-rank">
                     <td>{{ user_rank.user_rank }}</td>
                     <td>YOU</td>
-                    <td>{{ user_rank.user_iq }}</td>
+                    <td>{{ user_rank.user_iq.toFixed(0) }}</td>
                 </tr>
             </tbody>
         </table>
