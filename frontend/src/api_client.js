@@ -222,9 +222,6 @@ export default
      * @returns {Object} The response data from the API
      */
     static async logoutUser() {
-        // TODO maelys: uncomment this line when the backend is ready
-        //const response = await axios.post('/api/user/logout/');
-
         // remove cookie
         document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure`;
 

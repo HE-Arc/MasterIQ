@@ -1,5 +1,12 @@
 @import './base.css';
 
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 a { 
   text-decoration: none;
   color: var(--miq-blue);
