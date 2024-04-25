@@ -36,9 +36,6 @@ def load_initial_data(apps, schema_editor):
                         option_model.objects.create(text=df[letter][row], is_correct=False, question=question)
     print("Initial data loaded!")
 
-def add_community_category(apps, schema_editor):
-    category_model = apps.get_model('masteriqapp', 'Category')
-    category_model.objects.create(name="Community", image_path='data\\images\\community.jpg')
 def add_category_images(apps, schema_editor):
     category_model = apps.get_model('masteriqapp', 'Category')
 
@@ -57,6 +54,5 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(load_initial_data),
-        migrations.RunPython(add_community_category),
         migrations.RunPython(add_category_images)
     ]
