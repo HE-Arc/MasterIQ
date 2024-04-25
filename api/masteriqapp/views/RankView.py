@@ -50,9 +50,10 @@ class RankView(viewsets.ViewSet):
 
     @action(detail=True, methods=["GET"])
     def user(self, request, pk):
-        #TODO: ask how to do better?? filter won't be efficient if more element
+
         category = self.category_model.objects.get(pk=pk)
         ranking = self.iq_model.objects.annotate(row_number=Window(expression=RowNumber(), order_by=F('iq').desc())).filter(category=category).values('iq', 'user_id', 'row_number', 'category_id')
+        # filter won't be efficient if more element, but not better way to do it found during the project. (Discussed in mail)
         user_ranking = list(filter(lambda r: r['user_id'] == request.user.id, ranking))
         iq = self.iq_model.objects.get(user=request.user, category=category)
         data_to_send = {"user_rank": user_ranking[0]['row_number'], "user_iq": iq.iq}
@@ -60,8 +61,8 @@ class RankView(viewsets.ViewSet):
 
     @action(detail=False, methods=["GET"])
     def global_user(self, request):
-        # TODO: ask how to do better?? filter won't be efficient if more element
         data_with_score = get_user_model().objects.annotate(global_score=Avg('iq__iq'), row_number=Window(expression=RowNumber())).order_by('-global_score')
+        # filter won't be efficient if more element, but not better way to do it found during the project. (Discussed in mail)
         user_ranking = list(filter(lambda r: r.id == request.user.id, data_with_score))
         data_to_send = {"user_rank": user_ranking[0].row_number, "user_iq": user_ranking[0].global_score}
         return Response(data=data_to_send, status=status.HTTP_200_OK)
