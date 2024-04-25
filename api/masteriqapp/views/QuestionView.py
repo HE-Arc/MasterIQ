@@ -54,7 +54,6 @@ class QuestionView(viewsets.ViewSet):
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
         if 'question' in request.session:
-            print(request.session['question'])
             actual_question = self.question_model.objects.get(pk=request.session['question'])
             if actual_question is not None and actual_question.category == category:
                 serializer = QuestionSerializer(actual_question)
