@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
   <header>
-    <div class="wrapper">
+    <div class="wrapper container">
       <RouterLink id="main-title" to="/"><IconLogo class="header-logo"/></RouterLink>
       <nav>
         <RouterLink to="/categories" v-show="isConnected">Categories</RouterLink>
@@ -79,7 +79,6 @@ nav {
   }
   .wrapper {
     flex-direction: row;
-    max-width: 90vw;
     margin: 0 auto;
     padding: 1rem;
   }
