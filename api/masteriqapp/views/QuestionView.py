@@ -46,6 +46,7 @@ class QuestionView(viewsets.ViewSet):
     category_model = masteriq.get_model("Category")
     question_model = masteriq.get_model("Question")
     option_model = masteriq.get_model("Option")
+    question_user_model = masteriq.get_model("QuestionUser")
     iq_model = masteriq.get_model("IQ")
     queryset = category_model.objects.all()
     permission_classes = (IsAuthenticated,)
@@ -53,18 +54,17 @@ class QuestionView(viewsets.ViewSet):
     @action(detail=True, methods=["GET"], permission_classes=[IsAuthenticated])
     def new(self, request, pk):
         category = get_object_or_404(self.queryset, pk=pk)
-        if 'question' in request.session:
-            actual_question = self.question_model.objects.get(pk=request.session['question'])
-            if actual_question is not None and actual_question.category == category:
-                serializer = QuestionSerializer(actual_question)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+        actual_question = request.user.questions.filter(category=category).first()
+        if actual_question is not None and actual_question.category == category:
+            serializer = QuestionSerializer(actual_question)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         questions = self.question_model.objects.filter(category=category)
         if len(questions) == 0:
             return Response({"error":"No questions in this category"}, status=status.HTTP_404_NOT_FOUND)
         new_question = random.choice(questions)
-        request.session['question'] = new_question.id
-        request.session['options_asked'] = False
+        new_question_user = self.question_user_model(user=request.user, question=new_question, options_asked=False)
+        new_question_user.save()
         serializer = QuestionSerializer(new_question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -105,28 +105,32 @@ class QuestionView(viewsets.ViewSet):
 
         return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=False, methods=["GET"], permission_classes=[IsAuthenticated])
-    def options(self, request):
-        if not 'question' in request.session:
-            return Response(status=449, data={"error": "No question being answered at the moment"})
-        question_id = request.session['question']
-        request.session['options_asked'] = True
-        question = self.question_model.objects.get(pk=question_id)
+    @action(detail=True, methods=["GET"], permission_classes=[IsAuthenticated])
+    def options(self, request, pk):
+        category = get_object_or_404(self.queryset, pk=pk)
+        actual_question = self.question_user_model.objects.filter(question__category=category, user=request.user).first()
+        if actual_question is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No question being answered at the moment in this category"})
+        actual_question.options_asked = True
+        actual_question.save()
+        question = self.question_model.objects.get(pk=actual_question.question_id)
         data_to_send = {'question_id': question.id, 'number_of_options': len(question.options.all()), 'options': {}}
         for option in question.options.all():
             data_to_send['options'][option.id] = option.text
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
-    @action(detail=False, methods=["POST"], url_path="answer_text", permission_classes=[IsAuthenticated])
-    def answer_text(self, request):
+    @action(detail=True, methods=["POST"], url_path="answer_text", permission_classes=[IsAuthenticated])
+    def answer_text(self, request, pk):
         if not 'answer' in request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
-        if not 'question' in request.session or not 'options_asked' in request.session:
-            return Response(status=449, data={"error": "No question being answered at the moment"})
-        if request.session['options_asked']:
+        category = get_object_or_404(self.queryset, pk=pk)
+        actual_question = self.question_user_model.objects.filter(question__category=category, user=request.user).first()
+        if actual_question is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No question being answered at the moment in this category"})
+        if actual_question.options_asked:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Options already asked, you can only "
                                                                                "answer with options"})
-        question = self.question_model.objects.get(pk=request.session['question'])
+        question = actual_question.question
         right_answer = question.options.get(is_correct=True)
         user_is_correct = check_if_text_answer_is_correct(request.data['answer'], right_answer.text)
         iq = self.iq_model.objects.get(user=request.user, category=question.category)
@@ -138,21 +142,24 @@ class QuestionView(viewsets.ViewSet):
         iq.save()
         data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
                         "answer_sent": request.data['answer']}
-        del request.session['question']
-        del request.session['options_asked']
+        actual_question.delete()
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
-    @action(detail=False, methods=["POST"], url_path="answer_option", permission_classes=[IsAuthenticated])
-    def answer_options(self, request):
+    @action(detail=True, methods=["POST"], url_path="answer_option", permission_classes=[IsAuthenticated])
+    def answer_options(self, request, pk):
         if not 'answer' in request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "No answer given"})
-        if not 'question' in request.session or not 'options_asked' in request.session:
-            return Response(status=449, data={"error": "No question being answered at the moment"})
-        if not request.session['options_asked']:
+        category = get_object_or_404(self.queryset, pk=pk)
+        actual_question = self.question_user_model.objects.filter(question__category=category,
+                                                                  user=request.user).first()
+        if actual_question is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST,
+                            data={"error": "No question being answered at the moment in this category"})
+        if not actual_question.options_asked:
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data={"error": "Options already asked, you can only "
                                            "answer with options"})
-        question = self.question_model.objects.get(pk=request.session['question'])
+        question = actual_question.question
         right_answer = question.options.get(is_correct=True)
         answer_sent = self.option_model.objects.get(pk=request.data['answer'])
         user_is_correct = False
@@ -166,14 +173,16 @@ class QuestionView(viewsets.ViewSet):
 
         data_to_send = {"user_is_correct": user_is_correct, "right_answer": right_answer.text,
                         "answer_sent": answer_sent.text}
-        del request.session['question']
-        del request.session['options_asked']
+        actual_question.delete()
         return Response(status=status.HTTP_200_OK, data=data_to_send)
 
-    @action(detail=False, methods=["GET"], permission_classes=[IsAuthenticated])
-    def options_asked(self, request):
-        if not 'question' in request.session or not 'options_asked' in request.session:
+    @action(detail=True, methods=["GET"], permission_classes=[IsAuthenticated])
+    def options_asked(self, request, pk):
+        category = get_object_or_404(self.queryset, pk=pk)
+        actual_question = self.question_user_model.objects.filter(question__category=category, user=request.user).first()
+        print(actual_question.options_asked)
+        if actual_question is None:
             data_to_send = {"options_asked": False}
         else:
-            data_to_send = {"options_asked": request.session['options_asked']}
+            data_to_send = {"options_asked": actual_question.options_asked}
         return Response(status=status.HTTP_200_OK, data=data_to_send)

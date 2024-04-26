@@ -18,9 +18,8 @@ const disclaimer = ref(false);
 
 const fetchNewQuestion = async () => {
     question.value = await APIClient.getNewQuestion(id_category);
-
     // wait for the question before checking if the user has asked for options
-    hasAskedOptions.value = await APIClient.getIfOptionsAsked();
+    hasAskedOptions.value = await APIClient.getIfOptionsAsked(id_category);
 };
 
 // Fetch user IQ and add it to the graph

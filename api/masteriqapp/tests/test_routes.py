@@ -33,7 +33,7 @@ class RouteTestCases(TestCase):
             "options": ["11", "15", "He wasnt born"],
             "answer": "1"}, headers=headers)
 
-        response = c.get("/api/question/options/", headers=headers)
+        response = c.get("/api/question/1/options/", headers=headers)
         assert response.status_code == 200
         assert response.json()['question_id'] is not None
         assert response.json()['number_of_options'] is not None
