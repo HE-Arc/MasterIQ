@@ -79,7 +79,6 @@ nav {
   }
   .wrapper {
     flex-direction: row;
-    margin: 0 auto;
     padding: 1rem;
   }
   header {
