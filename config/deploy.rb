@@ -123,7 +123,7 @@ namespace :gunicorn do
   task :restart do
     on roles(:web) do |h|
       within "#{release_path}" do
-        exucute 'chmod', '+x', 'restart-gunicorn.sh'
+        execute 'chmod', '+x', 'restart-gunicorn.sh'
         execute :sudo, './restart-gunicorn.sh'
       end
     end
