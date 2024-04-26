@@ -105,17 +105,6 @@ namespace :django do
   end
 end
 
-after 'deploy:publishing', 'gunicorn:restart'
-
-namespace :gunicorn do
-  desc 'Restart application'
-  task :restart do
-    on roles(:web) do |h|
-      execute :sudo, 'systemctl restart gunicorn'
-    end
-  end
-end
-
 after 'deploy:publishing', 'nginx:restart'
 
 namespace :nginx do
@@ -123,6 +112,19 @@ namespace :nginx do
   task :restart do
     on roles(:web) do |h|
       execute :sudo, 'service nginx restart'
+    end
+  end
+end
+
+after 'deploy:publishing', 'gunicorn:restart'
+
+namespace :gunicorn do
+  desc 'Restart application'
+  task :restart do
+    on roles(:web) do |h|
+      within "#{release_path}" do
+        execute :sudo, './restart-gunicorn.sh'
+      end
     end
   end
 end
