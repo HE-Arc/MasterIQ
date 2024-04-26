@@ -1,13 +1,17 @@
 @import './base.css';
 
-#app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+main {
+  min-height: 80vh;
 }
 
-a { 
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
   text-decoration: none;
   color: var(--miq-blue);
   transition: 0.4s;
@@ -24,13 +28,11 @@ span,
 h1,
 h2,
 h3,
-h4
-{
+h4 {
   font-family: 'Montserrat', Inter, sans-serif;
 }
 
-.btn
-{
+.btn {
   padding: 1rem 2rem;
   border: none;
   border-radius: 27px;
@@ -42,8 +44,8 @@ h4
   background-color: var(--color-background-btn);
   line-height: 1.2;
 }
-.btn:hover
-{
+
+.btn:hover {
   background-color: var(--color-background-btn-hover);
   text-decoration: none;
 }
@@ -52,16 +54,14 @@ h4
   margin: 1.5rem 0 1rem 0;
 }
 
-.box
-{
+.box {
   padding: 2rem;
   background-color: var(--color-background-soft);
   border-radius: 27px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.title
-{
+.title {
   font-family: 'Montserrat', Inter, sans-serif;
   font-weight: 800;
   color: black;
@@ -69,30 +69,16 @@ h4
   font-style: italic;
 }
 
-.container
-{
+.container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.form-wrapper {
-    width: 100%;
-    max-width: 100%;
-    padding: 0 1rem;
-    box-sizing: border-box;
-}
-
 .button-wrapper {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: center;
-}
-
-.center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 @media (hover: hover) {
@@ -101,8 +87,16 @@ h4
   }
 }
 
-@media (min-width: 481px) {
-    .form-wrapper {
-        max-width: 80%;
-    }
+@media (min-width: 481px) {}
+
+@media (min-width: 576px) {
+  .wrapper {
+      max-width: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .wrapper {
+      max-width: 50%;
+  }
 }

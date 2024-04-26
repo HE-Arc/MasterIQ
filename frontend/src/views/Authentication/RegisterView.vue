@@ -44,14 +44,14 @@ const register = async () => {
 </script>
 
 <template>
-    <div>
-        <section class="center container">
+    <main class="container center">
+        <section class="wrapper">
             <div>
                 <h1 class="title">Register</h1>
                 <p class="info">Create a new account</p>
             </div>
             <p class="form-message" :class="{ 'success-message': registerSuccess }">{{ validationMessage }}</p>
-            <form @submit.prevent="register" class="form-wrapper">
+            <form @submit.prevent="register">
                 <div class="box">
                     <CustomInput label="Username" v-model="username" required />
                     <CustomInput label="Password" v-model="password" type="password" required />
@@ -62,17 +62,23 @@ const register = async () => {
                 </div>
             </form>
         </section>
-    </div>
+    </main>
 </template>
 
 <style scoped>
+.wrapper {
+    min-width: 50%;
+}
 
-.title, .info {
+.title,
+.info {
     text-align: center;
 }
 
 .form-message {
     color: red;
+    text-align: center;
+    margin-bottom: .5rem;
 }
 
 .success-message {

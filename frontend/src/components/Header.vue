@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
   <header>
-    <div class="wrapper">
+    <div class="header-wrapper container">
       <RouterLink id="main-title" to="/"><IconLogo class="header-logo"/></RouterLink>
       <nav>
         <RouterLink to="/categories" v-show="isConnected">Categories</RouterLink>
@@ -27,6 +27,7 @@ const props = defineProps({
 header {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
   line-height: 1.5;
+  min-height: 10vh;
 }
 
 .header-logo {
@@ -34,10 +35,11 @@ header {
   height: 50px;
 }
 
-.wrapper {
+.header-wrapper {
   display: flex;
   flex-direction: column;
   padding: 1.3rem 0;
+  height: 100%;
 }
 
 #main-title {
@@ -58,6 +60,9 @@ nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   a {
     display: inline-block;
@@ -77,15 +82,14 @@ nav {
     margin-bottom: 0;
     line-height: 0;
   }
-  .wrapper {
+  .header-wrapper {
     flex-direction: row;
-    max-width: 90vw;
-    margin: 0 auto;
     padding: 1rem;
   }
   header {
     nav
     {
+      justify-content: flex-end;
       margin-top: 0;
       padding: 0;
       text-align: right;

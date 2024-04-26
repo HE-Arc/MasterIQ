@@ -16,31 +16,30 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section class="container">
-      <p class="info">Maximise your IQ by correctly answering the questions in the different categories below and
-            climb the leaderboard to become the best.</p>
-    </section>
-    <section class="container col-wrapper">
-        <div>
-            <h1 class="title">Categories</h1>
-            <div class="all-categories">
-                <CategoryItem v-for="category, key in categories" :id="parseInt(key)" :category></CategoryItem>
-            </div>
-            <div class="btn-container">
-                <RouterLink class="btn" :to="{ name: 'Quiz', params: { id_category: randomId } }">Random category</RouterLink>
-            </div>
-        </div>
-        <LeaderBoard />
-    </section>
+    <main class="container">
+        <section class=" col-wrapper">
+            <p class="info">Maximise your IQ by correctly answering the questions in the different categories below and
+                climb the leaderboard to become the best.</p>
+            <div class="empty-space"></div>
+            <section>
+                <h1 class="title">Categories</h1>
+                <div class="all-categories">
+                    <CategoryItem v-for="category, key in categories" :id="parseInt(key)" :category></CategoryItem>
+                </div>
+                <div class="btn-container">
+                    <RouterLink class="btn" :to="{ name: 'Quiz', params: { id_category: randomId } }">Random category
+                    </RouterLink>
+                </div>
+            </section>
+            <LeaderBoard />
+        </section>
+    </main>
 </template>
 
 <style scoped>
-.info{
-  text-align: center;
-}
 .all-categories {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     row-gap: 1rem;
     column-gap: 1rem;
 }
@@ -59,11 +58,11 @@ onMounted(async () => {
     }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1024px) {
     .col-wrapper {
         display: grid;
-        grid-template-columns: 10fr 1fr;
-        column-gap: 1rem;
+        grid-template-columns: .75fr .25fr;
+        column-gap: 2rem;
     }
 }
 </style>

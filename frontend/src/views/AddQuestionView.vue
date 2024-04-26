@@ -23,7 +23,7 @@ const submitForm = async () => {
     try {
         if (!question.value.trim() || !correctAnswer.value.trim() || !wrongAnswer1.value.trim()
             || !wrongAnswer2.value.trim() || !wrongAnswer3.value.trim()) {
-            validationMessage.value ='Please fill in all fields. ';
+            validationMessage.value = 'Please fill in all fields. ';
         }
 
         if (question.value.length > 250 || correctAnswer.value.length > 250 || wrongAnswer1.value.length > 250
@@ -45,38 +45,47 @@ const submitForm = async () => {
         validationMessage.value += 'Failed to save question. Please try again.';
         console.error('Error saving question:', error.message);
     }
-  clearForm();
+    clearForm();
 };
 </script>
 
 <template>
-    <section class="center container form-wrapper">
-        <div>
-            <h1 class="title">Add your question</h1>
-            <p class="info">Help us become the best quiz game ever by adding your amazing new question!</p>
-        </div>
-        <form @submit.prevent="submitForm" class="form-wrapper">
-            <div class="box">
-                <CustomInput label="Question" v-model="question" required />
+    <main class="center container">
+        <section class="wrapper">
+            <div>
+                <h1 class="title">Add your question</h1>
+                <p class="info">Help us become the best quiz game ever by adding your amazing new question!</p>
             </div>
-            <div class="box">
-                <CustomInput label="Correct Answer" v-model="correctAnswer" required />
-                <CustomInput label="Wrong Answer 1" v-model="wrongAnswer1" required />
-                <CustomInput label="Wrong Answer 2" v-model="wrongAnswer2" required />
-                <CustomInput label="Wrong Answer 3" v-model="wrongAnswer3" required />
-                <p class="info" :style="{ color : validationMessage === 'Question saved successfully.' ?
-                    'green' : 'red'}">{{ validationMessage }}</p>
-            </div>
-            <div class="button-wrapper">
-                <button type="submit" class="btn">Submit</button>
-            </div>
-        </form>
-    </section>
+            <form @submit.prevent="submitForm">
+                <div class="box">
+                    <CustomInput label="Question" v-model="question" required />
+                </div>
+                <div class="box">
+                    <CustomInput label="Correct Answer" v-model="correctAnswer" required />
+                    <CustomInput label="Wrong Answer 1" v-model="wrongAnswer1" required />
+                    <CustomInput label="Wrong Answer 2" v-model="wrongAnswer2" required />
+                    <CustomInput label="Wrong Answer 3" v-model="wrongAnswer3" required />
+                    <p v-if="validationMessage" class="info" :style="{
+                color: validationMessage === 'Question saved successfully.' ?
+                    'green' : 'red'
+            }">{{ validationMessage }}</p>
+                </div>
+                <div class="button-wrapper">
+                    <button type="submit" class="btn">Submit</button>
+                </div>
+            </form>
+        </section>
+    </main>
 </template>
 
 <style scoped>
-.title, .info {
+.title
+{
+    margin-top: 1rem;
+}
+
+.title,
+.info {
     text-align: center;
 }
 </style>
-
