@@ -53,8 +53,8 @@ export default
      * Get if the user has already asked for options
      * @returns {Boolean} true if options have been asked, false otherwise
      */
-    static async getIfOptionsAsked() {
-        const response = await axios.get(`/api/question/options_asked`);
+    static async getIfOptionsAsked(category_id) {
+        const response = await axios.get(`/api/question/${category_id}/options_asked`);
         return !!response.data.options_asked;
     }
 
@@ -62,8 +62,8 @@ export default
      * Get the options for the current question
      * @returns {Object} {"id_option": "text_option"}
      */
-    static async getOptions() {
-        const response = await axios.get(`/api/question/options`);
+    static async getOptions(category_id) {
+        const response = await axios.get(`/api/question/${category_id}/options`);
         return response.data.options;
     }
 
@@ -138,8 +138,8 @@ export default
      * @param {String} answer_text 
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
-    static async postAnswerText(answer_text) {
-        const response = await axios.post(`/api/question/answer_text/`, {
+    static async postAnswerText(answer_text, category_id) {
+        const response = await axios.post(`/api/question/${category_id}/answer_text/`, {
             answer: answer_text,
         });
         return response.data;
@@ -150,8 +150,8 @@ export default
      * @param {String} option_id 
      * @returns {Object} {user_is_correct: Boolean, right_answer: String, answer_sent: String} 
      */
-    static async postAnswerOption(option_id) {
-        const response = await axios.post(`/api/question/answer_option/`, {
+    static async postAnswerOption(option_id, category_id) {
+        const response = await axios.post(`/api/question/${category_id}/answer_option/`, {
             answer: option_id,
         });
         return response.data;
