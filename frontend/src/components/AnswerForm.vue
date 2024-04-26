@@ -2,8 +2,11 @@
 import APIClient from '@/api_client';
 import { defineEmits, onMounted, ref, defineProps, watch } from 'vue';
 import AnswerMessage from '@/components/AnswerMessage.vue';
+import {useRoute} from "vue-router";
 
 // variables specific to this component
+const route = useRoute()
+const id_category = route.params.id_category;
 const emit = defineEmits(['newQuestion', 'updateUserIq'])
 const answer_sent = ref(false);
 const show_text_form = ref(true);
@@ -21,20 +24,20 @@ const props = defineProps({
 })
 
 const submitAnswerText = async () => {
-    response_to_answer.value = await APIClient.postAnswerText(answer_text.value);
+    response_to_answer.value = await APIClient.postAnswerText(answer_text.value, id_category);
     answer_sent.value = true;
     emit('updateUserIq');
 }
 
 const submitAnswerOption = async (id) => {
-    response_to_answer.value = await APIClient.postAnswerOption(id);
+    response_to_answer.value = await APIClient.postAnswerOption(id, id_category);
     answer_sent.value = true;
     emit('updateUserIq');
 }
 
 const fetchOptions = async () => {
     show_text_form.value = false;
-    options.value = await APIClient.getOptions();
+    options.value = await APIClient.getOptions(id_category);
 }
 
 const newQuestion = () => {
