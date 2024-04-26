@@ -51,7 +51,7 @@ const submitForm = async () => {
 
 <template>
     <main class="center container">
-        <section class="form-wrapper">
+        <section class="wrapper">
             <div>
                 <h1 class="title">Add your question</h1>
                 <p class="info">Help us become the best quiz game ever by adding your amazing new question!</p>

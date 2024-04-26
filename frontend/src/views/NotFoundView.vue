@@ -1,5 +1,5 @@
 <template>
-    <section class="not-found container form-wrapper">
+    <main class="container center">
         <div>
             <p class="info box">What HTTP status code indicates that the requested resource was not found on the server?</p>
             <h1 class="title box">404 Not Found</h1>
@@ -7,7 +7,7 @@
                 <router-link to="/" class="btn">Go to Main Page</router-link>
             </div>
         </div>
-    </section>
+    </main>
 </template>
 
 <style scoped>
@@ -21,15 +21,4 @@
     text-align: center;
 }
 
-@media (min-width: 576px) {
-    .form-wrapper {
-        max-width: 90%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .form-wrapper {
-        max-width: 70%;
-    }
-}
 </style>
