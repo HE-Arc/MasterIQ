@@ -29,14 +29,17 @@ const fetchUserIQ = async () => {
     graphComponent.value.addData(userIq);
 };
 
+const displayDisclaimer = async () => {
+    const categoryName = await APIClient.getCategoryName(id_category);
+    if (categoryName === 'Community') { // checking name because id is different in production
+        disclaimer.value = true;
+    }
+}
+
 onMounted(() => {
     fetchNewQuestion();
     fetchUserIQ();
-
-    // Check if URL is matching to community category
-    if (route.params.id_category === '23') {
-        disclaimer.value = true;
-    }
+    displayDisclaimer();
 });
 </script>
 
@@ -66,11 +69,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
-.quiz
-{
+.quiz {
     padding-bottom: 2rem;
 }
+
 .title {
     text-align: center;
 }
