@@ -3,9 +3,9 @@ import MainLogo from '@/components/icons/FullLogo.vue';
 </script>
 
 <template>
-    <main class="container">
+    <main class="container center">
         <MainLogo class="logo" />
-        <div class="info-wrapper box">
+        <div class="wrapper box">
             <p class="info">Are you looking to improve your IQ in different categories and measure yourself against
                 others?
                 Whether you're into history, geography, music or film, we've got the perfect quiz for you.
@@ -18,13 +18,8 @@ import MainLogo from '@/components/icons/FullLogo.vue';
 </template>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-.info-wrapper {
+.wrapper {
     text-align: center;
 }
 
@@ -42,21 +37,10 @@ import MainLogo from '@/components/icons/FullLogo.vue';
     width: 300px;
     height: 150px;
 }
-
 @media (min-width: 576px) {
-    .info-wrapper {
-        max-width: 80%;
-    }
-
-    .logo {
-        width: 400px;
-        height: 130px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .info-wrapper {
-        max-width: 50%;
-    }
+  .logo {
+      width: 400px;
+      height: 130px;
+  }
 }
 </style>

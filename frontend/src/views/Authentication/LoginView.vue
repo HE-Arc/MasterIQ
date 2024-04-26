@@ -40,14 +40,14 @@ const login = async () => {
 </script>
 
 <template>
-    <div>
-        <section class="center container">
+    <main class="container center">
+        <section class="wrapper">
             <div>
                 <h1 class="title">Login</h1>
                 <p class="info">Log in here</p>
             </div>
             <p class="form-message" :class="{ 'success-message': loginSuccess }">{{ validationMessage }}</p>
-            <form @submit.prevent="login" class="form-wrapper">
+            <form @submit.prevent="login">
                 <div class="box">
                     <CustomInput label="Username" v-model="username" required />
                     <CustomInput label="Password" v-model="password" type="password" required />
@@ -57,23 +57,24 @@ const login = async () => {
                 </div>
             </form>
         </section>
-    </div>
+    </main>
 </template>
 
 <style scoped>
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.title,
+.info {
+    text-align: center;
 }
 
-.title, .info {
-    text-align: center;
+.wrapper
+{
+    min-width: 50%;
 }
 
 .form-message {
     color: red;
+    text-align: center;
+    margin-bottom: .5rem;
 }
 
 .success-message {

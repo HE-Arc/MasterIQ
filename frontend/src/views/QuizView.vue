@@ -67,6 +67,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.quiz
+{
+    padding-bottom: 2rem;
+}
 .title {
     text-align: center;
 }
