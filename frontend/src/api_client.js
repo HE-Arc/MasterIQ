@@ -192,7 +192,7 @@ export default
         if (response.status === 200) {
             // set cookie
             let date = new Date(response.data.expires).toUTCString()
-            document.cookie = `access_token=Token ${response.data.token};secure;expires=${date};`; // TODO adding expires date from backend
+            document.cookie = `access_token=Token ${response.data.token};expires=${date};SameSite=Strict;Secure;`; // TODO adding expires date from backend
 
             // set axios header
             axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
@@ -223,7 +223,7 @@ export default
      */
     static async logoutUser() {
         // remove cookie
-        document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure`;
+        document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 
         // remove axios header
         delete axios.defaults.headers.common['Authorization'];
