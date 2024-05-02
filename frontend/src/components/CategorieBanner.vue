@@ -22,7 +22,7 @@ onMounted(async () => {
 <template>
     <Transition>
         <div v-if="imageLoaded">
-            <h2 class="title">Categorie</h2>
+            <h2 class="title">Category</h2>
             <div class="category-banner" :style="{ backgroundImage: 'url(' + imageData + ')' }">
                 <div class="opacity-filter">
                     <span class="category-name">{{ categoryName }}</span>
