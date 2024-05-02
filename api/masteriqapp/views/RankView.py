@@ -61,7 +61,9 @@ class RankView(viewsets.ViewSet):
 
     @action(detail=False, methods=["GET"])
     def global_user(self, request):
-        data_with_score = get_user_model().objects.annotate(global_score=Avg('iq__iq'), row_number=Window(expression=RowNumber())).order_by('-global_score')
+        data_with_score = get_user_model().objects.annotate(global_score=Avg('iq__iq')).annotate(row_number=Window(expression=RowNumber(), order_by=F('global_score').desc()))
+        for info in data_with_score:
+            print(f"User: {info.username} IQ: {info.global_score} Rank: {info.row_number}")
         # filter won't be efficient if more element, but not better way to do it found during the project. (Discussed in mail)
         user_ranking = list(filter(lambda r: r.id == request.user.id, data_with_score))
         data_to_send = {"user_rank": user_ranking[0].row_number, "user_iq": user_ranking[0].global_score}
